@@ -1,0 +1,210 @@
+
+Team ATL:
+  Cluster 0: 4 Spieler
+  Cluster 1: 4 Spieler
+  Cluster 2: 3 Spieler
+  Cluster 3: 1 Spieler
+  Cluster 4: 3 Spieler
+
+Team BKN:
+  Cluster 0: 4 Spieler
+  Cluster 1: 6 Spieler
+  Cluster 2: 0 Spieler
+  Cluster 3: 1 Spieler
+  Cluster 4: 4 Spieler
+
+Team BOS:
+  Cluster 0: 5 Spieler
+  Cluster 1: 4 Spieler
+  Cluster 2: 3 Spieler
+  Cluster 3: 2 Spieler
+  Cluster 4: 1 Spieler
+
+Team CHA:
+  Cluster 0: 3 Spieler
+  Cluster 1: 1 Spieler
+  Cluster 2: 1 Spieler
+  Cluster 3: 3 Spieler
+  Cluster 4: 8 Spieler
+
+Team CHI:
+  Cluster 0: 1 Spieler
+  Cluster 1: 2 Spieler
+  Cluster 2: 3 Spieler
+  Cluster 3: 2 Spieler
+  Cluster 4: 7 Spieler
+
+Team CLE:
+  Cluster 0: 3 Spieler
+  Cluster 1: 2 Spieler
+  Cluster 2: 4 Spieler
+  Cluster 3: 0 Spieler
+  Cluster 4: 5 Spieler
+
+Team DAL:
+  Cluster 0: 6 Spieler
+  Cluster 1: 6 Spieler
+  Cluster 2: 1 Spieler
+  Cluster 3: 2 Spieler
+  Cluster 4: 2 Spieler
+
+Team DEN:
+  Cluster 0: 5 Spieler
+  Cluster 1: 1 Spieler
+  Cluster 2: 5 Spieler
+  Cluster 3: 2 Spieler
+  Cluster 4: 1 Spieler
+
+Team DET:
+  Cluster 0: 2 Spieler
+  Cluster 1: 4 Spieler
+  Cluster 2: 2 Spieler
+  Cluster 3: 3 Spieler
+  Cluster 4: 3 Spieler
+
+Team GSW:
+  Cluster 0: 1 Spieler
+  Cluster 1: 5 Spieler
+  Cluster 2: 1 Spieler
+  Cluster 3: 3 Spieler
+  Cluster 4: 3 Spieler
+
+Team HOU:
+  Cluster 0: 6 Spieler
+  Cluster 1: 4 Spieler
+  Cluster 2: 3 Spieler
+  Cluster 3: 1 Spieler
+  Cluster 4: 2 Spieler
+
+Team IND:
+  Cluster 0: 3 Spieler
+  Cluster 1: 4 Spieler
+  Cluster 2: 3 Spieler
+  Cluster 3: 0 Spieler
+  Cluster 4: 4 Spieler
+
+Team LAC:
+  Cluster 0: 4 Spieler
+  Cluster 1: 4 Spieler
+  Cluster 2: 2 Spieler
+  Cluster 3: 1 Spieler
+  Cluster 4: 4 Spieler
+
+Team LAL:
+  Cluster 0: 8 Spieler
+  Cluster 1: 1 Spieler
+  Cluster 2: 3 Spieler
+  Cluster 3: 1 Spieler
+  Cluster 4: 4 Spieler
+
+Team MEM:
+  Cluster 0: 6 Spieler
+  Cluster 1: 6 Spieler
+  Cluster 2: 1 Spieler
+  Cluster 3: 2 Spieler
+  Cluster 4: 2 Spieler
+
+Team MIA:
+  Cluster 0: 2 Spieler
+  Cluster 1: 4 Spieler
+  Cluster 2: 2 Spieler
+  Cluster 3: 3 Spieler
+  Cluster 4: 3 Spieler
+
+Team MIL:
+  Cluster 0: 5 Spieler
+  Cluster 1: 5 Spieler
+  Cluster 2: 3 Spieler
+  Cluster 3: 0 Spieler
+  Cluster 4: 3 Spieler
+
+Team MIN:
+  Cluster 0: 6 Spieler
+  Cluster 1: 3 Spieler
+  Cluster 2: 5 Spieler
+  Cluster 3: 0 Spieler
+  Cluster 4: 0 Spieler
+
+Team NOP:
+  Cluster 0: 6 Spieler
+  Cluster 1: 2 Spieler
+  Cluster 2: 0 Spieler
+  Cluster 3: 2 Spieler
+  Cluster 4: 8 Spieler
+
+Team NYK:
+  Cluster 0: 5 Spieler
+  Cluster 1: 1 Spieler
+  Cluster 2: 5 Spieler
+  Cluster 3: 1 Spieler
+  Cluster 4: 1 Spieler
+
+Team OKC:
+  Cluster 0: 6 Spieler
+  Cluster 1: 5 Spieler
+  Cluster 2: 2 Spieler
+  Cluster 3: 1 Spieler
+  Cluster 4: 3 Spieler
+
+Team ORL:
+  Cluster 0: 5 Spieler
+  Cluster 1: 3 Spieler
+  Cluster 2: 2 Spieler
+  Cluster 3: 2 Spieler
+  Cluster 4: 3 Spieler
+
+Team PHI:
+  Cluster 0: 6 Spieler
+  Cluster 1: 5 Spieler
+  Cluster 2: 0 Spieler
+  Cluster 3: 2 Spieler
+  Cluster 4: 3 Spieler
+
+Team PHX:
+  Cluster 0: 4 Spieler
+  Cluster 1: 3 Spieler
+  Cluster 2: 2 Spieler
+  Cluster 3: 4 Spieler
+  Cluster 4: 3 Spieler
+
+Team POR:
+  Cluster 0: 4 Spieler
+  Cluster 1: 4 Spieler
+  Cluster 2: 1 Spieler
+  Cluster 3: 2 Spieler
+  Cluster 4: 4 Spieler
+
+Team SAC:
+  Cluster 0: 4 Spieler
+  Cluster 1: 4 Spieler
+  Cluster 2: 3 Spieler
+  Cluster 3: 1 Spieler
+  Cluster 4: 1 Spieler
+
+Team SAS:
+  Cluster 0: 5 Spieler
+  Cluster 1: 6 Spieler
+  Cluster 2: 2 Spieler
+  Cluster 3: 1 Spieler
+  Cluster 4: 1 Spieler
+
+Team TOR:
+  Cluster 0: 3 Spieler
+  Cluster 1: 2 Spieler
+  Cluster 2: 1 Spieler
+  Cluster 3: 2 Spieler
+  Cluster 4: 7 Spieler
+
+Team UTA:
+  Cluster 0: 2 Spieler
+  Cluster 1: 7 Spieler
+  Cluster 2: 0 Spieler
+  Cluster 3: 0 Spieler
+  Cluster 4: 6 Spieler
+
+Team WAS:
+  Cluster 0: 7 Spieler
+  Cluster 1: 5 Spieler
+  Cluster 2: 0 Spieler
+  Cluster 3: 1 Spieler
+  Cluster 4: 4 Spieler
