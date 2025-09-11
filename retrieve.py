@@ -14,8 +14,15 @@ player_stats = leaguedashplayerstats.LeagueDashPlayerStats(
     league_id_nullable="00"  # 00 = NBA, 10 = WNBA, 20 = G-League
 ).get_data_frames()[0]
 
-# Nur aktive Spieler mit >= 20 Spielen
-filtered_players = player_stats[player_stats["GP"] >= 20].copy()
+# Für jedes Team die 10 Spieler mit den meisten Spielen auswählen
+filtered_players = (
+    player_stats
+    .sort_values(["TEAM_ABBREVIATION", "GP"], ascending=[True, False])
+    .groupby("TEAM_ABBREVIATION", group_keys=False)
+    .head(10)          # Top 10 nach GP je Team
+    .copy()
+)
+
 
 # -----------------------------
 # 3. Körperliche Attribute ergänzen
