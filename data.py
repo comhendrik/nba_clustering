@@ -2,6 +2,7 @@ import os
 import pandas as pd
 from sklearn.cluster import KMeans
 import matplotlib.pyplot as plt
+import numpy as np
 
 csv_file = "nba_2024_25_players.csv"
 
@@ -21,7 +22,7 @@ from sklearn.preprocessing import MinMaxScaler
 # 3. K-Means Clusteranalyse
 # -----------------------------
 features = [
-    'REB_AVG', 'AST_AVG',
+    'OREB_AVG', 'DREB_AVG', 'AST_AVG',
     'TOV_AVG', 'STL_AVG', 'BLK_AVG',
     'PF_AVG', 'PFD_AVG', 'PTS_AVG',
     'HEIGHT',
@@ -46,11 +47,33 @@ X = filtered_players[features].fillna(0)
 scaler = MinMaxScaler(feature_range=(0, 1))
 X_scaled = scaler.fit_transform(X)
 
-cluster_size = 4
+# Beispiel: Gewichte nach Spielrelevanz
+feature_weights = {
+    'OREB_AVG': 0.1,
+    'DREB_AVG': 0.45,
+    'AST_AVG': 0.3,
+    'TOV_AVG': 0.68,
+    'STL_AVG': 0.33,
+    'BLK_AVG': 0.2,
+    'PF_AVG': 0.2,
+    'PFD_AVG': 0.12,
+    'PTS_AVG': 0.73,
+    'HEIGHT': 0.4,
+    'WEIGHT': 0.6
+}
+
+# Standardisieren
+scaler = MinMaxScaler(feature_range=(0,1))
+X_scaled = scaler.fit_transform(X)
+
+# Gewichtung anwenden
+weights_array = np.array([feature_weights[f] for f in features])
+X_weighted = X_scaled * weights_array  # Multiplikation der Spalten mit Gewichten
+
+
+cluster_size = 3  # Anzahl der Cluster
 kmeans = KMeans(n_clusters=cluster_size, random_state=42)
-filtered_players['cluster'] = kmeans.fit_predict(X_scaled)
-
-
+filtered_players['cluster'] = kmeans.fit_predict(X_weighted)
 
 
 # -----------------------------
