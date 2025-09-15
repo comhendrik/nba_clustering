@@ -24,9 +24,7 @@ from sklearn.preprocessing import MinMaxScaler
 features = [
     'OREB_AVG', 'DREB_AVG', 'AST_AVG',
     'TOV_AVG', 'STL_AVG', 'BLK_AVG',
-    'PF_AVG', 'PFD_AVG', 'PTS_AVG',
-    'HEIGHT',
-    'WEIGHT'
+    'PF_AVG', 'PFD_AVG', 'PTS_AVG'
 ]
 
 # Prüfen, ob alle Features existieren
@@ -47,7 +45,10 @@ X = filtered_players[features].fillna(0)
 scaler = MinMaxScaler(feature_range=(0, 1))
 X_scaled = scaler.fit_transform(X)
 
-# Beispiel: Gewichte nach Spielrelevanz
+# Gewichte nach Spielrelevanz
+
+
+# Original weights
 feature_weights = {
     'OREB_AVG': 0.1,
     'DREB_AVG': 0.45,
@@ -58,8 +59,6 @@ feature_weights = {
     'PF_AVG': 0.2,
     'PFD_AVG': 0.12,
     'PTS_AVG': 0.73,
-    'HEIGHT': 0.4,
-    'WEIGHT': 0.6
 }
 
 # Standardisieren
@@ -226,3 +225,42 @@ with open(dataset_info_path, "w") as f:
     f.write(", ".join(filtered_players.columns))
     
 print(f"Dataset info saved in {dataset_info_path}")
+
+
+# -----------------------------
+# 8. 2D Scatterplots für Clustervisualisierung
+# -----------------------------
+import seaborn as sns
+
+# Wähle ein paar interessante Features für die 2D-Plots
+plot_features = [
+    ('PTS_AVG', 'AST_AVG'),
+    ('PTS_AVG', 'REB_AVG'),
+    ('AST_AVG', 'REB_AVG'),
+    ('STL_AVG', 'BLK_AVG'),
+    ('MIN_AVG', 'PTS_AVG'),
+]
+
+for x_feat, y_feat in plot_features:
+    plt.figure(figsize=(8,6))
+    sns.scatterplot(
+        data=filtered_players,
+        x=x_feat,
+        y=y_feat,
+        hue='cluster',
+        palette='Set2',
+        s=80,
+        alpha=0.7
+    )
+    plt.title(f"Cluster Visualisierung: {x_feat} vs {y_feat}")
+    plt.xlabel(x_feat)
+    plt.ylabel(y_feat)
+    plt.legend(title='Cluster')
+    plt.grid(True)
+    
+    # Optional: Speichern
+    plot_file = os.path.join(output_dir, f"cluster_plot_{x_feat}_{y_feat}.png")
+    plt.savefig(plot_file)
+    print(f"Plot gespeichert: {plot_file}")
+    
+    plt.show()

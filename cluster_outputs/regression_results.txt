@@ -1,7 +1,7 @@
 --- Einfluss der Cluster auf Siege (Linear Regression) ---
-0    0.232587
-1    0.175210
-2    0.143201
+1    0.270623
+0    0.252863
+2    0.174809
 dtype: float64
 
-Intercept (Basis-Siege): -2.5530280128075304
+Intercept (Basis-Siege): -14.819209822771398

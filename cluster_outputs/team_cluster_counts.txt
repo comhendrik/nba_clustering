@@ -21,8 +21,8 @@ Team CHA:
 
 Team CHI:
   Cluster 0: 63.34931467181467 Minuten
-  Cluster 1: 126.28626270871943 Minuten
-  Cluster 2: 31.20890410958904 Minuten
+  Cluster 1: 101.26520450766124 Minuten
+  Cluster 2: 56.22996231064724 Minuten
 
 Team CLE:
   Cluster 0: 92.62888169014083 Minuten
@@ -46,8 +46,8 @@ Team DET:
 
 Team GSW:
   Cluster 0: 32.17785714285714 Minuten
-  Cluster 1: 104.17996264397357 Minuten
-  Cluster 2: 87.73212630904635 Minuten
+  Cluster 1: 81.46059272527438 Minuten
+  Cluster 2: 110.45149622774552 Minuten
 
 Team HOU:
   Cluster 0: 64.40443624304663 Minuten
@@ -71,13 +71,13 @@ Team LAL:
 
 Team MEM:
   Cluster 0: 29.82367117117117 Minuten
-  Cluster 1: 127.07095590775651 Minuten
-  Cluster 2: 68.28631461154879 Minuten
+  Cluster 1: 108.65135391770677 Minuten
+  Cluster 2: 86.70591660159855 Minuten
 
 Team MIA:
   Cluster 0: 69.668769008769 Minuten
-  Cluster 1: 139.1682476361421 Minuten
-  Cluster 2: 52.931048611111116 Minuten
+  Cluster 1: 65.12940370698567 Minuten
+  Cluster 2: 126.96989254026755 Minuten
 
 Team MIL:
   Cluster 0: 70.24262223365929 Minuten
@@ -91,8 +91,8 @@ Team MIN:
 
 Team NOP:
   Cluster 0: 67.69401336477988 Minuten
-  Cluster 1: 124.19367424242425 Minuten
-  Cluster 2: 47.04160595682856 Minuten
+  Cluster 1: 76.16498376623377 Minuten
+  Cluster 2: 95.07029643301904 Minuten
 
 Team NYK:
   Cluster 0: 70.34995726495725 Minuten
@@ -101,13 +101,13 @@ Team NYK:
 
 Team OKC:
   Cluster 0: 66.59489766081872 Minuten
-  Cluster 1: 147.29784457105754 Minuten
-  Cluster 2: 27.88845029239766 Minuten
+  Cluster 1: 124.3517919394786 Minuten
+  Cluster 2: 50.83450292397661 Minuten
 
 Team ORL:
   Cluster 0: 65.68156038647342 Minuten
-  Cluster 1: 74.86640196996414 Minuten
-  Cluster 2: 70.46999042950515 Minuten
+  Cluster 1: 95.28728292234509 Minuten
+  Cluster 2: 50.04910947712419 Minuten
 
 Team PHI:
   Cluster 0: 70.22272435897435 Minuten
@@ -116,13 +116,13 @@ Team PHI:
 
 Team PHX:
   Cluster 0: 73.79339964157708 Minuten
-  Cluster 1: 129.21351649166814 Minuten
-  Cluster 2: 54.15582974732429 Minuten
+  Cluster 1: 105.09312586666813 Minuten
+  Cluster 2: 78.27622037232429 Minuten
 
 Team POR:
   Cluster 0: 94.03971494708996 Minuten
-  Cluster 1: 53.11708772469869 Minuten
-  Cluster 2: 79.07580071669624 Minuten
+  Cluster 1: 72.87295837146486 Minuten
+  Cluster 2: 59.31993006993007 Minuten
 
 Team SAC:
   Cluster 0: 137.411630999631 Minuten

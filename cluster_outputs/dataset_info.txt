@@ -2,7 +2,7 @@
 
 Total number of players: 300
 Number of teams: 30
-Number of features used for clustering: 11
+Number of features used for clustering: 9
 Median AGE: 26.0
 Median MIN_AVG: 24.906703444809942
 Median PTS_AVG: 10.120198463508324
