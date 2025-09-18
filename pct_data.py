@@ -13,8 +13,7 @@ import seaborn as sns
 # ==============================================
 # Einstellungen
 # ==============================================
-csv_file = "nba_2024_25_players_per.csv"
-mode = "AVG"     # <--- hier kannst du z.B. PER_36, PER_40, per35 einsetzen
+csv_file = "nba_2024_25_players_advanced.csv"
 cluster_size = 3
 
 # ==============================================
@@ -29,9 +28,15 @@ else:
 # ==============================================
 # 2. Features für Clustering
 # ==============================================
-base_cols = ["OREB", "DREB", "AST", "TOV", "STL", "BLK", "PF", "PFD", "PTS"]
-features = [f"{col}_{mode}" for col in base_cols]
+features = ['USG_PCT', 'PCT_FGM', 'PCT_FGA',
+       'PCT_FG3M', 'PCT_FG3A', 'PCT_FTM', 'PCT_FTA', 'PCT_OREB', 'PCT_DREB',
+       'PCT_REB', 'PCT_AST', 'PCT_TOV', 'PCT_STL', 'PCT_BLK', 'PCT_BLKA',
+       'PCT_PF', 'PCT_PFD', 'PCT_PTS']
 
+#without attempted
+features = ['USG_PCT', 'PCT_FGM',
+       'PCT_FG3M', 'PCT_FTM', 'PCT_OREB', 'PCT_DREB', 'PCT_AST', 'PCT_TOV', 'PCT_STL', 'PCT_BLK',
+       'PCT_PF', 'PCT_PFD', 'PCT_PTS']
 missing = [f for f in features if f not in filtered_players.columns]
 if missing:
     raise ValueError(f"Folgende Spalten fehlen im DataFrame: {missing}")
@@ -39,47 +44,29 @@ if missing:
 X = filtered_players[features].fillna(0)
 
 # ==============================================
-# 3. Skalierung & Gewichtung
-# ==============================================
-scaler = MinMaxScaler(feature_range=(0, 1))
-X_scaled = scaler.fit_transform(X)
-
-base_feature_weights = {
-    "OREB": 0.1, "DREB": 0.45, "AST": 0.3, "TOV": 0.68,
-    "STL": 0.33, "BLK": 0.2, "PF": 0.2, "PFD": 0.12, "PTS": 0.73,
-}
-feature_weights = {f"{k}_{mode}": v for k, v in base_feature_weights.items()}
-weights_array = np.array([feature_weights[f] for f in features])
-X_weighted = X_scaled * weights_array
-
-# ==============================================
 # 4. KMeans Clustering
 # ==============================================
 kmeans = KMeans(init="k-means++", n_init=50, n_clusters=cluster_size, random_state=42)
-filtered_players["cluster"] = kmeans.fit_predict(X_weighted)
+filtered_players["cluster"] = kmeans.fit_predict(X)
 
 # ==============================================
 # 5. Cluster-Summary
 # ==============================================
-static_features = ["AGE", "MIN_AVG", "HEIGHT", "WEIGHT"]
-stats = ["REB", "AST", "TOV", "STL", "BLK", "PF", "PFD", "PTS"]
-important_features = static_features + [f"{s}_{mode}" for s in stats]
-
 cluster_summary = (
     filtered_players.groupby("cluster")
-    .median(numeric_only=True)[important_features]
+    .median(numeric_only=True)[features]
 )
 
 # ==============================================
 # 6. Ausgabe-Verzeichnisse
 # ==============================================
-output_dir = "cluster_outputs"
+output_dir = "pct_outputs"
 os.makedirs(output_dir, exist_ok=True)
 
 # ==============================================
 # 7. Silhouette Score speichern
 # ==============================================
-sil_score = silhouette_score(X_scaled, filtered_players["cluster"])
+sil_score = silhouette_score(X, filtered_players["cluster"])
 print(f"Silhouette Coefficient: {sil_score:.4f}")
 with open(os.path.join(output_dir, "silhouette_score.txt"), "w") as f:
     f.write(f"Silhouette Coefficient for {cluster_size} clusters: {sil_score:.4f}\n")
@@ -87,11 +74,7 @@ with open(os.path.join(output_dir, "silhouette_score.txt"), "w") as f:
 # ==============================================
 # 8. Cluster-Profile & Spielerlisten
 # ==============================================
-player_columns = [
-    "PLAYER_NAME", "TEAM_ABBREVIATION", "MIN_AVG", "AGE",
-    f"REB_{mode}", f"AST_{mode}", f"TOV_{mode}", f"STL_{mode}",
-    f"BLK_{mode}", f"PF_{mode}", f"PFD_{mode}", f"PTS_{mode}", "HEIGHT", "WEIGHT",
-]
+
 
 with open(os.path.join(output_dir, "cluster_summary.txt"), "w") as f:
     f.write("Cluster-Profile (Medianwerte mit Height & Weight):\n")
@@ -102,11 +85,11 @@ for cid in range(cluster_size):
     cluster_players = filtered_players[filtered_players["cluster"] == cid]
     file_path = os.path.join(output_dir, f"cluster_{cid}_players.txt")
 
-    cluster_medians = cluster_players[player_columns[2:]].median()
+    cluster_medians = cluster_players[features].median()
 
     with open(file_path, "w") as f:
         f.write(f"Cluster {cid} - Alle Spieler:\n\n")
-        f.write(cluster_players[player_columns].to_string(index=False))
+        f.write(cluster_players[features].to_string(index=False))
         f.write("\n\n--- Medianwerte ---\n")
         for col, val in cluster_medians.items():
             f.write(f"{col}: {val}\n")
@@ -167,41 +150,11 @@ with open(info_path, "w") as f:
     f.write(f"Total players: {len(filtered_players)}\n")
     f.write(f"Teams: {filtered_players['TEAM_ABBREVIATION'].nunique()}\n")
     f.write(f"Features for clustering: {len(features)}\n")
-    f.write(f"Median AGE: {filtered_players['AGE'].median()}\n")
-    f.write(f"Median MIN_AVG: {filtered_players['MIN_AVG'].median()}\n")
-    f.write(f"Median PTS_{mode}: {filtered_players[f'PTS_{mode}'].median()}\n")
-    f.write(f"Median REB_{mode}: {filtered_players[f'REB_{mode}'].median()}\n")
-    f.write(f"Median AST_{mode}: {filtered_players[f'AST_{mode}'].median()}\n")
     f.write("\nColumns:\n")
     f.write(", ".join(filtered_players.columns))
 
 # ==============================================
 # 13. Scatterplots
 # ==============================================
-plot_features = [
-    (f"PTS_{mode}", f"AST_{mode}"),
-    (f"PTS_{mode}", f"REB_{mode}"),
-    (f"AST_{mode}", f"REB_{mode}"),
-    (f"STL_{mode}", f"BLK_{mode}"),
-    ("MIN_AVG", f"PTS_{mode}"),
-]
-for x_feat, y_feat in plot_features:
-    plt.figure(figsize=(8, 6))
-    sns.scatterplot(
-        data=filtered_players,
-        x=x_feat,
-        y=y_feat,
-        hue="cluster",
-        palette="Set2",
-        s=80,
-        alpha=0.7,
-    )
-    plt.title(f"Cluster: {x_feat} vs {y_feat}")
-    plt.xlabel(x_feat)
-    plt.ylabel(y_feat)
-    plt.legend(title="Cluster")
-    plt.grid(True)
-    plt.savefig(os.path.join(output_dir, f"cluster_plot_{x_feat}_{y_feat}.png"))
-    plt.show()
 
-print(f"\nAlle Ergebnisse im Ordner '{output_dir}' gespeichert.")
+
