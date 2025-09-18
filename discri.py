@@ -29,39 +29,60 @@ quartile_thresholds = {col: player_stats[col].quantile(0.60) for col in features
 # 4. Multi-label segmentation
 # ==============================================
 def segment_player_multilabel(row):
+    labels = []
 
-    # Specific archetypes first
-    if row['PCT_OREB'] >= quartile_thresholds['PCT_OREB'] or row['PCT_DREB'] >= quartile_thresholds['PCT_DREB']:
-        return "Rebounder/Big"
-    if row['PCT_AST'] >= quartile_thresholds['PCT_AST'] and row['PCT_PTS'] < quartile_thresholds['PCT_PTS']:
-        return "Playmaker"  
-    if row['PCT_PTS'] >= quartile_thresholds['PCT_PTS']/2 and \
-       (row['PCT_FG3M'] >= quartile_thresholds['PCT_FG3M'] or row['PCT_FG3A'] >= quartile_thresholds['PCT_FG3A']):
-        return "3&D/Stretch"    
+    # --- Specific archetypes ---
+    if row["PCT_OREB"] >= quartile_thresholds["PCT_OREB"] or row["PCT_DREB"] >= quartile_thresholds["PCT_DREB"]:
+        labels.append("Rebounder/Big")
 
-    # General archetypes
-    offensive = row['PCT_PTS'] >= quartile_thresholds['PCT_PTS'] or row['PCT_AST'] >= quartile_thresholds['PCT_AST']
-    defensive = row['PCT_STL'] >= quartile_thresholds['PCT_STL'] or \
-                row['PCT_BLK'] >= quartile_thresholds['PCT_BLK'] or \
-                row['PCT_DREB'] >= quartile_thresholds['PCT_DREB']
+    if row["PCT_AST"] >= quartile_thresholds["PCT_AST"] and row["PCT_PTS"] < quartile_thresholds["PCT_PTS"]:
+        labels.append("Playmaker")
+
+    if (
+        row["PCT_PTS"] >= quartile_thresholds["PCT_PTS"] / 2
+        and (
+            row["PCT_FG3M"] >= quartile_thresholds["PCT_FG3M"]
+            or row["PCT_FG3A"] >= quartile_thresholds["PCT_FG3A"]
+        )
+    ):
+        labels.append("3&D/Stretch")
+
+    # --- General archetypes ---
+    offensive = (
+        row["PCT_PTS"] >= quartile_thresholds["PCT_PTS"]
+        or row["PCT_AST"] >= quartile_thresholds["PCT_AST"]
+    )
+    defensive = (
+        row["PCT_STL"] >= quartile_thresholds["PCT_STL"]
+        or row["PCT_BLK"] >= quartile_thresholds["PCT_BLK"]
+        or row["PCT_DREB"] >= quartile_thresholds["PCT_DREB"]
+    )
 
     if offensive and defensive:
-        return "Two-Way"
+        labels.append("Two-Way")
     elif offensive:
-        return "Offensive"
+        labels.append("Offensive")
     elif defensive:
-        return "Defensive"
-    else:
-        return "Other"
+        labels.append("Defensive")
 
-player_stats['Archetype'] = player_stats.apply(segment_player_multilabel, axis=1)
+    if not labels:
+        labels.append("Other")
+
+    return labels
+
+# Step 1: assign the list of labels
+player_stats["Archetype"] = player_stats.apply(segment_player_multilabel, axis=1)
+
+# Step 2: explode so each label becomes its own row
+player_stats_expanded = player_stats.explode("Archetype").reset_index(drop=True)
+
 
 # ==============================================
 # 2. Train LDA
 # ==============================================
 
-X = player_stats[features]
-y = player_stats["Archetype"]
+X = player_stats_expanded[features]
+y = player_stats_expanded["Archetype"]
 print(y.head())
 
 lda = LinearDiscriminantAnalysis()
