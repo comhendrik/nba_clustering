@@ -1,10 +1,10 @@
 import os
 import pandas as pd
-from sklearn.cluster import KMeans
+from sklearn.cluster import AgglomerativeClustering, KMeans
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.preprocessing import MinMaxScaler
-from sklearn.metrics import silhouette_score
+from sklearn.metrics import pairwise_distances, silhouette_score
 from nba_api.stats.endpoints import leaguestandings
 from nba_api.stats.static import teams
 from sklearn.linear_model import LinearRegression
@@ -28,9 +28,7 @@ else:
 # ==============================================
 # 2. Features für Clustering
 # ==============================================
-features = ['USG_PCT', 'PCT_FGM',
-       'PCT_FG3M', 'PCT_FTM', 'PCT_OREB', 'PCT_DREB', 'PCT_AST', 'PCT_TOV', 'PCT_STL', 'PCT_BLK',
-       'PCT_PF', 'PCT_PFD', 'PCT_PTS']
+features = ['PCT_OREB', 'PCT_DREB', 'PCT_AST', 'PCT_TOV', 'PCT_STL', 'PCT_BLK', 'PCT_PTS']
 missing = [f for f in features if f not in filtered_players.columns]
 if missing:
     raise ValueError(f"Folgende Spalten fehlen im DataFrame: {missing}")
@@ -38,10 +36,48 @@ if missing:
 X = filtered_players[features].fillna(0)
 
 # ==============================================
-# 4. KMeans Clustering
+# 3. Quartile-Encoding für Features
 # ==============================================
+quartile_features = X.copy()  # copy of numeric features
+
+for col in features:
+    Q1 = quartile_features[col].quantile(0.33)
+    Q3 = quartile_features[col].quantile(0.66)
+
+    def quartile_encoding(val):
+        if val <= Q1:
+            return 1
+        elif val <= Q3:
+            return 2
+        else:
+            return 3
+
+    quartile_features[col] = quartile_features[col].apply(quartile_encoding)
+
+# Optional: check result
+print(quartile_features.head())
+
+# ==============================================
+# 4. KMeans Clustering auf quartile-kodierten Daten
+# ==============================================
+#kmeans = KMeans(init="k-means++", n_init=50, n_clusters=cluster_size, random_state=42)
+#filtered_players["cluster"] = kmeans.fit_predict(quartile_features)
+# ==============================================
+# 4. Agglomerative Clustering auf quartile-kodierten Daten
+# ==============================================
+
+# X_nominal = your quartile-coded DataFrame
+#distance_matrix = pairwise_distances(quartile_features, metric='hamming')
+
+#agg = AgglomerativeClustering(
+#    n_clusters=cluster_size,
+#    metric='precomputed',  # use custom distance matrix
+#    linkage='average'        # linkage method compatible with precomputed
+#)
+#labels = agg.fit_predict(distance_matrix)
+#filtered_players['cluster'] = labels
 kmeans = KMeans(init="k-means++", n_init=50, n_clusters=cluster_size, random_state=42)
-filtered_players["cluster"] = kmeans.fit_predict(X)
+filtered_players["cluster"] = kmeans.fit_predict(quartile_features)
 
 # ==============================================
 # 5. Cluster-Summary
@@ -54,13 +90,13 @@ cluster_summary = (
 # ==============================================
 # 6. Ausgabe-Verzeichnisse
 # ==============================================
-output_dir = "pct_outputs"
+output_dir = "boxplot_outputs"
 os.makedirs(output_dir, exist_ok=True)
 
 # ==============================================
 # 7. Silhouette Score speichern
 # ==============================================
-sil_score = silhouette_score(X, filtered_players["cluster"])
+sil_score = silhouette_score(quartile_features, filtered_players["cluster"])
 print(f"Silhouette Coefficient: {sil_score:.4f}")
 with open(os.path.join(output_dir, "silhouette_score.txt"), "w") as f:
     f.write(f"Silhouette Coefficient for {cluster_size} clusters: {sil_score:.4f}\n")
@@ -68,8 +104,6 @@ with open(os.path.join(output_dir, "silhouette_score.txt"), "w") as f:
 # ==============================================
 # 8. Cluster-Profile & Spielerlisten
 # ==============================================
-
-
 with open(os.path.join(output_dir, "cluster_summary.txt"), "w") as f:
     f.write("Cluster-Profile (Medianwerte mit Height & Weight):\n")
     f.write(str(cluster_summary))
@@ -146,9 +180,3 @@ with open(info_path, "w") as f:
     f.write(f"Features for clustering: {len(features)}\n")
     f.write("\nColumns:\n")
     f.write(", ".join(filtered_players.columns))
-
-# ==============================================
-# 13. Scatterplots
-# ==============================================
-
-

@@ -16,7 +16,8 @@ team_stats = leaguedashteamstats.LeagueDashTeamStats(
 # 3. Pro-Spiel Averages berechnen
 # -----------------------------
 # Die Stats sind oft schon totals und GP = games played
-avg_cols = ['OREB', 'DREB', 'AST', 'TOV', 'STL', 'BLK', 'PF', 'PFD', 'PTS']
+
+avg_cols = ['OREB', 'DREB', 'AST', 'TOV', 'STL', 'BLK', 'PTS']
 for col in avg_cols:
     team_stats[f"{col}_AVG"] = team_stats[col] / team_stats["GP"]
 

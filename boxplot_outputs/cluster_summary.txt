@@ -1,0 +1,6 @@
+Cluster-Profile (Medianwerte mit Height & Weight):
+         PCT_OREB  PCT_DREB  PCT_AST  PCT_TOV  PCT_STL  PCT_BLK  PCT_PTS
+cluster                                                                 
+0          0.1265     0.142    0.114    0.121    0.174    0.108    0.175
+1          0.3240     0.257    0.143    0.154    0.176    0.308    0.174
+2          0.1080     0.155    0.284    0.242    0.218    0.114    0.229

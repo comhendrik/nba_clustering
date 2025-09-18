@@ -1,0 +1,10 @@
+--- Einfluss der Segmente auf Siege (Linear Regression) ---
+Other            0.401400
+Offensive        0.400890
+3&D/Stretch      0.279053
+Two-Way          0.155812
+Defensive        0.142411
+Playmaker        0.134051
+Rebounder/Big    0.000000
+dtype: float64
+Intercept: -2.2786497842160216
