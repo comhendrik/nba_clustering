@@ -1,8 +1,0 @@
-=== NBA 2024-25 Players Dataset Info ===
-
-Total players: 300
-Teams: 30
-Features for clustering: 21
-
-Columns:
-PLAYER_ID, PLAYER_NAME, TEAM_ID, MIN, TEAM_ABBREVIATION, AGE, GP, OFF_RATING_Advanced, DEF_RATING_Advanced, NET_RATING_Advanced, E_TOV_PCT_Advanced, EFG_PCT_Advanced, USG_PCT_Advanced, PACE_Advanced, PIE_Advanced, POSS_Advanced, USG_PCT_Usage, PCT_FGM_Usage, PCT_FG3M_Usage, PCT_FTM_Usage, PCT_OREB_Usage, PCT_DREB_Usage, PCT_AST_Usage, PCT_TOV_Usage, PCT_STL_Usage, PCT_BLK_Usage, PCT_PF_Usage, PCT_PFD_Usage, PCT_PTS_2PT_Scoring, PCT_PTS_2PT_MR_Scoring, PCT_PTS_3PT_Scoring, PCT_PTS_FB_Scoring, PCT_PTS_FT_Scoring, OPP_PTS_OFF_TOV_Defense, OPP_PTS_2ND_CHANCE_Defense, OPP_PTS_FB_Defense, OPP_PTS_PAINT_Defense, DEF_WS_Defense, DEF_WS_RAW_Defense, MIN_AVG, OPP_PTS_OFF_TOV_Defense_AVG, OPP_PTS_FB_Defense_AVG, OPP_PTS_2ND_CHANCE_Defense_AVG, OPP_PTS_PAINT_Defense_AVG, POSS_Advanced_AVG, cluster

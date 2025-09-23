@@ -1,109 +1,76 @@
-# -----------------------------
-# 1. Imports
-# -----------------------------
-from nba_api.stats.endpoints import leaguedashplayerstats, commonplayerinfo
-from nba_api.stats.static import players
+from nba_api.stats.endpoints import leaguedashplayerstats
 import pandas as pd
-import time
+from functools import reduce
 
-# -----------------------------
-# 2. Spieler-Stats abrufen (Saison 2024-25, NBA only)
-# -----------------------------
-player_stats = leaguedashplayerstats.LeagueDashPlayerStats(
-    season="2024-25",
-    league_id_nullable="00"  # 00 = NBA, 10 = WNBA, 20 = G-League
-).get_data_frames()[0]
+# ----- Settings -----
+SEASON = "2024-25"
+SEASON_TYPE = "Regular Season"
+OUTPUT_FILE = "nba_player_stats_2024_25.csv"
 
-# Für jedes Team die 10 Spieler mit den meisten Spielen auswählen
-filtered_players = (
-    player_stats
-    .sort_values(["TEAM_ABBREVIATION", "GP"], ascending=[True, False])
-    .groupby("TEAM_ABBREVIATION", group_keys=False)
-    .head(10)          # Top 10 nach GP je Team
-    .copy()
-)
+# ----- Measure types -----
+measure_types = ["Base", "Advanced", "Misc", "Scoring", "Usage", "Defense"]
+
+# ----- Fetch all measure types -----
+dfs = []
+
+for measure in measure_types:
+    print(f"Fetching measure type: {measure}")
+    df = leaguedashplayerstats.LeagueDashPlayerStats(
+        season=SEASON,
+        season_type_all_star=SEASON_TYPE,
+        measure_type_detailed_defense=measure
+    ).get_data_frames()[0]
+
+    # Keep PLAYER_ID and PLAYER_NAME without suffix; add suffix to other columns only
+    if measure != "Base":
+        suffix = f"_{measure}"
+        df = df.rename(columns={col: f"{col}{suffix}" for col in df.columns if col not in ["PLAYER_ID", "PLAYER_NAME"]})
+    
+    if "MIN" in df.columns and "TEAM_ID" in df.columns:
+        df = df.groupby("TEAM_ID", group_keys=False).apply(lambda x: x.nlargest(10, "MIN"))
+
+    dfs.append(df)
+
+# ----- Merge all DataFrames on PLAYER_ID and PLAYER_NAME -----
+merged_df = reduce(lambda left, right: pd.merge(left, right, on=["PLAYER_ID", "PLAYER_NAME"]), dfs)
 
 
-# -----------------------------
-# 3. Körperliche Attribute ergänzen
-# -----------------------------
-heights, weights = [], []
 
-
-i = 0
-for pid in filtered_players["PLAYER_ID"]:
-    try:
-        print(f"Verarbeite Spieler {i+1}/{len(filtered_players)} mit PLAYER_ID {pid}")
-        i += 1
-        info = commonplayerinfo.CommonPlayerInfo(player_id=pid).get_data_frames()[0]
-        height_str = info.at[0, "HEIGHT"]  # z.B. "6-7"
-        weight = info.at[0, "WEIGHT"]
-
-        # Height von "6-7" in Inches konvertieren
-        if isinstance(height_str, str) and "-" in height_str:
-            feet, inches = height_str.split("-")
-            height_in = int(feet) * 12 + int(inches)
-        else:
-            height_in = None
-
-        heights.append(height_in)
-        weights.append(weight)
-
-        time.sleep(0.3)  # API-Rate Limit
-
-    except Exception as e:
-        print(f"Fehler bei PLAYER_ID {pid}: {e}")
-        heights.append(None)
-        weights.append(None)
-
-filtered_players["HEIGHT"] = heights
-filtered_players["WEIGHT"] = weights
-
-# -----------------------------
-# 4. Averages berechnen
-# -----------------------------
-avg_cols = [
-    'MIN', 'FGM', 'FGA', 'FG3M', 'FG3A', 'FTM', 'FTA',
-    'OREB', 'DREB', 'REB', 'AST', 'TOV', 'STL', 'BLK', 'BLKA',
-    'PF', 'PFD', 'PTS', 'PLUS_MINUS'
+avg_metrics = [
+    "MIN",
+    "FG3M",
+    "FGM",
+    "FTM",
+    "OREB",
+    "DREB",
+    "AST",
+    "TOV",
+    "STL",
+    "BLK",
+    "PF",
+    "PFD",
+    "PTS_OFF_TOV_Misc",
+    "PTS_2ND_CHANCE_Misc",
+    "PTS_FB_Misc",
+    "PTS_PAINT_Misc",
+    "OPP_PTS_OFF_TOV_Misc",
+    "OPP_PTS_2ND_CHANCE_Misc",
+    "OPP_PTS_FB_Misc",
+    "OPP_PTS_PAINT_Misc",
+    "OPP_PTS_OFF_TOV_Defense", "OPP_PTS_FB_Defense", 
+    "OPP_PTS_2ND_CHANCE_Defense", "OPP_PTS_PAINT_Defense", 
+    "POSS_Advanced",
+    "PTS",
+    "REB"
 ]
 
-for col in avg_cols:
-    filtered_players[f"{col}_AVG"] = filtered_players[col] / filtered_players["GP"]
+for col in avg_metrics:
+    if col in merged_df.columns:
+        merged_df[col + "_AVG"] = merged_df.apply(
+            lambda row: row[col] / row["GP"] if row["GP"] > 0 else 0, axis=1
+        )
 
-# -----------------------------
-# 5. Features definieren
-# -----------------------------
-features = [
-    'PLAYER_NAME', 'TEAM_ABBREVIATION',
-    'AGE', 'GP', 'W', 'L', 'W_PCT',
-    'MIN_AVG', 'FGM_AVG', 'FGA_AVG', 'FG_PCT',
-    'FG3M_AVG', 'FG3A_AVG', 'FG3_PCT',
-    'FTM_AVG', 'FTA_AVG', 'FT_PCT',
-    'OREB_AVG', 'DREB_AVG', 'REB_AVG', 'AST_AVG',
-    'TOV_AVG', 'STL_AVG', 'BLK_AVG', 'BLKA_AVG',
-    'PF_AVG', 'PFD_AVG', 'PTS_AVG', 'PLUS_MINUS_AVG',
-    'NBA_FANTASY_PTS', 'DD2', 'TD3',
-    'GP_RANK', 'W_RANK', 'L_RANK', 'W_PCT_RANK', 'MIN_RANK',
-    'FGM_RANK', 'FGA_RANK', 'FG_PCT_RANK', 'FG3M_RANK', 'FG3A_RANK',
-    'FG3_PCT_RANK', 'FTM_RANK', 'FTA_RANK', 'FT_PCT_RANK',
-    'OREB_RANK', 'DREB_RANK', 'REB_RANK', 'AST_RANK',
-    'TOV_RANK', 'STL_RANK', 'BLK_RANK', 'BLKA_RANK',
-    'PF_RANK', 'PFD_RANK', 'PTS_RANK', 'PLUS_MINUS_RANK',
-    'NBA_FANTASY_PTS_RANK', 'DD2_RANK', 'TD3_RANK',
-    'TEAM_COUNT',
-    'HEIGHT',
-    'WEIGHT'
-]
 
-X = filtered_players[features].fillna(0)
-
-print("\n--- DataFrame mit Features ---")
-print(X.head())
-
-# -----------------------------
-# 6. DataFrame als CSV speichern
-# -----------------------------
-csv_file = "nba_2024_25_players.csv"
-X.to_csv(csv_file, index=False)
-print(f"DataFrame gespeichert als: {csv_file}")
+# ----- Save to CSV -----
+merged_df.to_csv(OUTPUT_FILE, index=False)
+print(f"Saved {len(merged_df.columns)+1} metrics (including MIN_AVG) to {OUTPUT_FILE}")

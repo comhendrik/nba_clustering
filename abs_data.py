@@ -14,13 +14,14 @@ import seaborn as sns
 # Einstellungen
 # ==============================================
 csv_file = "nba_player_stats_2024_25.csv"
+mode = "AVG"     # <--- z.B. PER_36, PER_40, per35
 cluster_size = 3
-output_dir = "pct_outputs"
+output_dir = "cluster_outputs"
 os.makedirs(output_dir, exist_ok=True)
 
-report_path = os.path.join(output_dir, "pct_analysis_report.txt")
+report_path = os.path.join(output_dir, "analysis_report.txt")
 with open(report_path, "w") as report:
-    report.write("=== NBA 2024-25 Advanced Percentages Cluster & Regression Analysis ===\n\n")
+    report.write("=== NBA 2024-25 Cluster & Regression Analysis ===\n\n")
 
 # ==============================================
 # 1. CSV laden
@@ -34,11 +35,9 @@ else:
 # ==============================================
 # 2. Features für Clustering
 # ==============================================
-features = [
-    'USG_PCT_Usage', 'PCT_FGM_Usage', 'PCT_FG3M_Usage', 'PCT_FTM_Usage',
-    'PCT_OREB_Usage', 'PCT_DREB_Usage', 'PCT_AST_Usage', 'PCT_TOV_Usage',
-    'PCT_STL_Usage', 'PCT_BLK_Usage', 'PCT_PF_Usage', 'PCT_PFD_Usage',
-]
+base_cols = ["OREB", "DREB", "AST", "TOV", "STL", "BLK", "PF", "PFD", "PTS"]
+features = [f"{col}_{mode}" for col in base_cols]
+
 missing = [f for f in features if f not in filtered_players.columns]
 if missing:
     raise ValueError(f"Fehlende Spalten im DataFrame: {missing}")
@@ -46,17 +45,35 @@ if missing:
 X = filtered_players[features].fillna(0)
 
 # ==============================================
-# 3. KMeans Clustering
+# 3. Skalierung & Gewichtung
 # ==============================================
-kmeans = KMeans(init="k-means++", n_init=50, n_clusters=cluster_size, random_state=42)
-filtered_players["cluster"] = kmeans.fit_predict(X)
+scaler = MinMaxScaler(feature_range=(0, 1))
+X_scaled = scaler.fit_transform(X)
+
+base_feature_weights = {
+    "OREB": 0.1, "DREB": 0.45, "AST": 0.3, "TOV": 0.68,
+    "STL": 0.33, "BLK": 0.2, "PF": 0.2, "PFD": 0.12, "PTS": 0.73,
+}
+feature_weights = {f"{k}_{mode}": v for k, v in base_feature_weights.items()}
+weights_array = np.array([feature_weights[f] for f in features])
+X_weighted = X_scaled * weights_array
 
 # ==============================================
-# 4. Cluster-Summary
+# 4. KMeans Clustering
 # ==============================================
+kmeans = KMeans(init="k-means++", n_init=50, n_clusters=cluster_size, random_state=42)
+filtered_players["cluster"] = kmeans.fit_predict(X_weighted)
+
+# ==============================================
+# 5. Cluster-Summary
+# ==============================================
+static_features = ["AGE", "MIN_AVG",]
+stats = ["REB", "AST", "TOV", "STL", "BLK", "PF", "PFD", "PTS"]
+important_features = static_features + [f"{s}_{mode}" for s in stats]
+
 cluster_summary = (
     filtered_players.groupby("cluster")
-    .median(numeric_only=True)[features]
+    .median(numeric_only=True)[important_features]
 )
 
 with open(report_path, "a") as report:
@@ -65,19 +82,19 @@ with open(report_path, "a") as report:
     report.write("\n\n")
 
 # ==============================================
-# 5. Silhouette Score
+# 6. Silhouette Score
 # ==============================================
-sil_score = silhouette_score(X, filtered_players["cluster"])
+sil_score = silhouette_score(X_scaled, filtered_players["cluster"])
 print(f"Silhouette Coefficient: {sil_score:.4f}")
 with open(report_path, "a") as report:
     report.write(f"Silhouette Coefficient: {sil_score:.4f}\n\n")
 
 # ==============================================
-# 6. Clustergrößen-Plot
+# 7. Clustergrößen-Plot
 # ==============================================
 plt.figure(figsize=(6, 4))
 filtered_players["cluster"].value_counts().sort_index().plot(
-    kind="bar", title="Cluster-Größen", color="lightgreen", edgecolor="black"
+    kind="bar", title="Cluster-Größen", color="skyblue", edgecolor="black"
 )
 plt.xlabel("Cluster")
 plt.ylabel("Anzahl Spieler")
@@ -86,7 +103,7 @@ plt.savefig(os.path.join(output_dir, "cluster_sizes.png"), dpi=300)
 plt.close()
 
 # ==============================================
-# 7. Minuten pro Team/Cluster
+# 8. Minuten pro Team/Cluster
 # ==============================================
 team_cluster_minutes = (
     filtered_players.groupby(["TEAM_ABBREVIATION", "cluster"])["MIN_AVG"]
@@ -103,7 +120,7 @@ with open(report_path, "a") as report:
     report.write("\n\n")
 
 # ==============================================
-# 8. Regression Siege ~ Cluster-Minuten
+# 9. Regression Siege ~ Cluster-Minuten
 # ==============================================
 standings = leaguestandings.LeagueStandings(season="2024-25", league_id="00").get_data_frames()[0]
 nba_teams = teams.get_teams()
@@ -159,44 +176,18 @@ plt.savefig(os.path.join(output_dir, "regression_fit.png"), dpi=300)
 plt.close()
 
 # ==============================================
-# 9. Dataset-Info
+# 10. Dataset-Info
 # ==============================================
 with open(report_path, "a") as report:
     report.write("=== Dataset Info ===\n")
     report.write(f"Total players: {len(filtered_players)}\n")
     report.write(f"Teams: {filtered_players['TEAM_ABBREVIATION'].nunique()}\n")
     report.write(f"Features for clustering: {len(features)}\n")
-    report.write("\nColumns:\n")
-    report.write(", ".join(filtered_players.columns))
+    report.write(f"Median AGE: {filtered_players['AGE'].median()}\n")
+    report.write(f"Median MIN_AVG: {filtered_players['MIN_AVG'].median()}\n")
+    report.write(f"Median PTS_{mode}: {filtered_players[f'PTS_{mode}'].median()}\n")
+    report.write(f"Median REB_{mode}: {filtered_players[f'REB_{mode}'].median()}\n")
+    report.write(f"Median AST_{mode}: {filtered_players[f'AST_{mode}'].median()}\n")
     report.write("\n\n")
-
-# ==============================================
-# 10. Scatterplots
-# ==============================================
-plot_features = [
-    ("USG_PCT_Usage", "PCT_PTS_Usage"),
-    ("PCT_AST_Usage", "PCT_TOV_Usage"),
-    ("PCT_OREB_Usage", "PCT_DREB_Usage"),
-    ("PCT_STL_Usage", "PCT_BLK_Usage"),
-]
-for x_feat, y_feat in plot_features:
-    plt.figure(figsize=(8, 6))
-    sns.scatterplot(
-        data=filtered_players,
-        x=x_feat,
-        y=y_feat,
-        hue="cluster",
-        palette="tab10",
-        s=80,
-        alpha=0.7,
-    )
-    plt.title(f"Clustervergleich: {x_feat} vs {y_feat}")
-    plt.xlabel(x_feat)
-    plt.ylabel(y_feat)
-    plt.legend(title="Cluster")
-    plt.grid(True, linestyle="--", alpha=0.6)
-    plt.tight_layout()
-    plt.savefig(os.path.join(output_dir, f"cluster_plot_{x_feat}_{y_feat}.png"), dpi=300)
-    plt.close()
 
 print(f"\nAnalyse abgeschlossen. Ergebnisse gespeichert in '{report_path}' und Plots in '{output_dir}'.")

@@ -1,8 +1,0 @@
-Cluster-Profile (Medianwerte mit Height & Weight):
-         PCT_STL_Usage  PCT_PTS_FB_Scoring  ...  OPP_PTS_2ND_CHANCE_Defense_AVG  OPP_PTS_PAINT_Defense_AVG
-cluster                                     ...                                                           
-0               0.1765              0.0825  ...                        0.415254                   0.392975
-1               0.1970              0.1505  ...                        0.380872                   0.397838
-2               0.2030              0.1470  ...                        0.681849                   0.743568
-
-[3 rows x 21 columns]

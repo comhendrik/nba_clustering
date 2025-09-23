@@ -1,0 +1,185 @@
+=== NBA 2024-25 Advanced Percentages Cluster & Regression Analysis ===
+
+=== Cluster-Summary (Medianwerte) ===
+         USG_PCT_Usage  PCT_FGM_Usage  PCT_FG3M_Usage  PCT_FTM_Usage  PCT_OREB_Usage  PCT_DREB_Usage  PCT_AST_Usage  PCT_TOV_Usage  PCT_STL_Usage  PCT_BLK_Usage  PCT_PF_Usage  PCT_PFD_Usage
+cluster                                                                                                                                                                                      
+0                0.250         0.2460           0.249          0.300           0.108          0.1730          0.287         0.2630         0.2100          0.119        0.1720          0.274
+1                0.169         0.2035           0.037          0.186           0.415          0.3085          0.159         0.1805         0.1755          0.407        0.2485          0.235
+2                0.162         0.1680           0.218          0.122           0.155          0.1640          0.139         0.1420         0.1970          0.132        0.1890          0.137
+
+Silhouette Coefficient: 0.3165
+
+=== Minuten pro Team und Cluster ===
+
+Team ATL:
+  Cluster 0: 36.0 Minuten
+  Cluster 1: 49.3 Minuten
+  Cluster 2: 181.8 Minuten
+
+Team BKN:
+  Cluster 0: 77.8 Minuten
+  Cluster 1: 45.0 Minuten
+  Cluster 2: 119.1 Minuten
+
+Team BOS:
+  Cluster 0: 70.7 Minuten
+  Cluster 1: 61.4 Minuten
+  Cluster 2: 142.2 Minuten
+
+Team CHA:
+  Cluster 0: 63.7 Minuten
+  Cluster 1: 64.9 Minuten
+  Cluster 2: 109.7 Minuten
+
+Team CHI:
+  Cluster 0: 63.3 Minuten
+  Cluster 1: 46.5 Minuten
+  Cluster 2: 126.3 Minuten
+
+Team CLE:
+  Cluster 0: 109.2 Minuten
+  Cluster 1: 58.5 Minuten
+  Cluster 2: 84.9 Minuten
+
+Team DAL:
+  Cluster 0: 79.0 Minuten
+  Cluster 1: 55.0 Minuten
+  Cluster 2: 141.6 Minuten
+
+Team DEN:
+  Cluster 0: 100.7 Minuten
+  Cluster 1: 12.3 Minuten
+  Cluster 2: 155.1 Minuten
+
+Team DET:
+  Cluster 0: 63.1 Minuten
+  Cluster 1: 68.5 Minuten
+  Cluster 2: 119.5 Minuten
+
+Team GSW:
+  Cluster 0: 88.3 Minuten
+  Cluster 1: 30.6 Minuten
+  Cluster 2: 115.9 Minuten
+
+Team HOU:
+  Cluster 0: 32.9 Minuten
+  Cluster 1: 77.5 Minuten
+  Cluster 2: 151.0 Minuten
+
+Team IND:
+  Cluster 0: 114.0 Minuten
+  Cluster 1: 30.2 Minuten
+  Cluster 2: 108.8 Minuten
+
+Team LAC:
+  Cluster 0: 99.8 Minuten
+  Cluster 1: 32.8 Minuten
+  Cluster 2: 137.1 Minuten
+
+Team LAL:
+  Cluster 0: 105.2 Minuten
+  Cluster 1: 19.5 Minuten
+  Cluster 2: 134.3 Minuten
+
+Team MEM:
+  Cluster 0: 99.9 Minuten
+  Cluster 1: 40.3 Minuten
+  Cluster 2: 103.6 Minuten
+
+Team MIA:
+  Cluster 0: 66.1 Minuten
+  Cluster 1: 56.5 Minuten
+  Cluster 2: 147.9 Minuten
+
+Team MIL:
+  Cluster 0: 55.8 Minuten
+  Cluster 1: 91.4 Minuten
+  Cluster 2: 119.8 Minuten
+
+Team MIN:
+  Cluster 0: 68.6 Minuten
+  Cluster 1: 33.2 Minuten
+  Cluster 2: 158.9 Minuten
+
+Team NOP:
+  Cluster 0: 100.3 Minuten
+  Cluster 1: 47.0 Minuten
+  Cluster 2: 112.9 Minuten
+
+Team NYK:
+  Cluster 0: 35.4 Minuten
+  Cluster 1: 55.5 Minuten
+  Cluster 2: 182.3 Minuten
+
+Team OKC:
+  Cluster 0: 66.6 Minuten
+  Cluster 1: 55.3 Minuten
+  Cluster 2: 137.1 Minuten
+
+Team ORL:
+  Cluster 0: 152.9 Minuten
+  Cluster 1: 61.6 Minuten
+  Cluster 2: 35.6 Minuten
+
+Team PHI:
+  Cluster 0: 114.5 Minuten
+  Cluster 1: 15.6 Minuten
+  Cluster 2: 124.8 Minuten
+
+Team PHX:
+  Cluster 0: 73.8 Minuten
+  Cluster 1: 39.6 Minuten
+  Cluster 2: 148.8 Minuten
+
+Team POR:
+  Cluster 0: 137.4 Minuten
+  Cluster 1: 49.9 Minuten
+  Cluster 2: 80.2 Minuten
+
+Team SAC:
+  Cluster 0: 102.7 Minuten
+  Cluster 1: 53.5 Minuten
+  Cluster 2: 109.7 Minuten
+
+Team SAS:
+  Cluster 0: 62.8 Minuten
+  Cluster 1: 58.5 Minuten
+  Cluster 2: 145.3 Minuten
+
+Team TOR:
+  Cluster 0: 92.9 Minuten
+  Cluster 1: 50.0 Minuten
+  Cluster 2: 115.0 Minuten
+
+Team UTA:
+  Cluster 0: 116.7 Minuten
+  Cluster 1: 81.7 Minuten
+  Cluster 2: 61.2 Minuten
+
+Team WAS:
+  Cluster 0: 72.2 Minuten
+  Cluster 1: 27.1 Minuten
+  Cluster 2: 159.4 Minuten
+
+
+=== Regression: Siege ~ Cluster-Minuten ===
+Koeffizienten:
+2    0.208995
+1    0.178138
+0    0.152673
+dtype: float64
+Intercept (Basis-Siege): -6.820
+R²: 0.0493
+Adjusted R²: -0.0604
+MAE: 10.7290
+MSE: 163.9007
+RMSE: 12.8024
+
+=== Dataset Info ===
+Total players: 300
+Teams: 30
+Features for clustering: 12
+
+Columns:
+PLAYER_ID, PLAYER_NAME, NICKNAME, TEAM_ID, TEAM_ABBREVIATION, AGE, GP, W, L, W_PCT, MIN, FGM, FGA, FG_PCT, FG3M, FG3A, FG3_PCT, FTM, FTA, FT_PCT, OREB, DREB, REB, AST, TOV, STL, BLK, BLKA, PF, PFD, PTS, PLUS_MINUS, NBA_FANTASY_PTS, DD2, TD3, WNBA_FANTASY_PTS, GP_RANK, W_RANK, L_RANK, W_PCT_RANK, MIN_RANK, FGM_RANK, FGA_RANK, FG_PCT_RANK, FG3M_RANK, FG3A_RANK, FG3_PCT_RANK, FTM_RANK, FTA_RANK, FT_PCT_RANK, OREB_RANK, DREB_RANK, REB_RANK, AST_RANK, TOV_RANK, STL_RANK, BLK_RANK, BLKA_RANK, PF_RANK, PFD_RANK, PTS_RANK, PLUS_MINUS_RANK, NBA_FANTASY_PTS_RANK, DD2_RANK, TD3_RANK, WNBA_FANTASY_PTS_RANK, TEAM_COUNT, NICKNAME_Advanced, TEAM_ID_Advanced, TEAM_ABBREVIATION_Advanced, AGE_Advanced, GP_Advanced, W_Advanced, L_Advanced, W_PCT_Advanced, MIN_Advanced, E_OFF_RATING_Advanced, OFF_RATING_Advanced, sp_work_OFF_RATING_Advanced, E_DEF_RATING_Advanced, DEF_RATING_Advanced, sp_work_DEF_RATING_Advanced, E_NET_RATING_Advanced, NET_RATING_Advanced, sp_work_NET_RATING_Advanced, AST_PCT_Advanced, AST_TO_Advanced, AST_RATIO_Advanced, OREB_PCT_Advanced, DREB_PCT_Advanced, REB_PCT_Advanced, TM_TOV_PCT_Advanced, E_TOV_PCT_Advanced, EFG_PCT_Advanced, TS_PCT_Advanced, USG_PCT_Advanced, E_USG_PCT_Advanced, E_PACE_Advanced, PACE_Advanced, PACE_PER40_Advanced, sp_work_PACE_Advanced, PIE_Advanced, POSS_Advanced, FGM_Advanced, FGA_Advanced, FGM_PG_Advanced, FGA_PG_Advanced, FG_PCT_Advanced, GP_RANK_Advanced, W_RANK_Advanced, L_RANK_Advanced, W_PCT_RANK_Advanced, MIN_RANK_Advanced, E_OFF_RATING_RANK_Advanced, OFF_RATING_RANK_Advanced, sp_work_OFF_RATING_RANK_Advanced, E_DEF_RATING_RANK_Advanced, DEF_RATING_RANK_Advanced, sp_work_DEF_RATING_RANK_Advanced, E_NET_RATING_RANK_Advanced, NET_RATING_RANK_Advanced, sp_work_NET_RATING_RANK_Advanced, AST_PCT_RANK_Advanced, AST_TO_RANK_Advanced, AST_RATIO_RANK_Advanced, OREB_PCT_RANK_Advanced, DREB_PCT_RANK_Advanced, REB_PCT_RANK_Advanced, TM_TOV_PCT_RANK_Advanced, E_TOV_PCT_RANK_Advanced, EFG_PCT_RANK_Advanced, TS_PCT_RANK_Advanced, USG_PCT_RANK_Advanced, E_USG_PCT_RANK_Advanced, E_PACE_RANK_Advanced, PACE_RANK_Advanced, sp_work_PACE_RANK_Advanced, PIE_RANK_Advanced, FGM_RANK_Advanced, FGA_RANK_Advanced, FGM_PG_RANK_Advanced, FGA_PG_RANK_Advanced, FG_PCT_RANK_Advanced, TEAM_COUNT_Advanced, NICKNAME_Misc, TEAM_ID_Misc, TEAM_ABBREVIATION_Misc, AGE_Misc, GP_Misc, W_Misc, L_Misc, W_PCT_Misc, MIN_Misc, PTS_OFF_TOV_Misc, PTS_2ND_CHANCE_Misc, PTS_FB_Misc, PTS_PAINT_Misc, OPP_PTS_OFF_TOV_Misc, OPP_PTS_2ND_CHANCE_Misc, OPP_PTS_FB_Misc, OPP_PTS_PAINT_Misc, BLK_Misc, BLKA_Misc, PF_Misc, PFD_Misc, NBA_FANTASY_PTS_Misc, GP_RANK_Misc, W_RANK_Misc, L_RANK_Misc, W_PCT_RANK_Misc, MIN_RANK_Misc, PTS_OFF_TOV_RANK_Misc, PTS_2ND_CHANCE_RANK_Misc, PTS_FB_RANK_Misc, PTS_PAINT_RANK_Misc, OPP_PTS_OFF_TOV_RANK_Misc, OPP_PTS_2ND_CHANCE_RANK_Misc, OPP_PTS_FB_RANK_Misc, OPP_PTS_PAINT_RANK_Misc, BLK_RANK_Misc, BLKA_RANK_Misc, PF_RANK_Misc, PFD_RANK_Misc, NBA_FANTASY_PTS_RANK_Misc, TEAM_COUNT_Misc, NICKNAME_Scoring, TEAM_ID_Scoring, TEAM_ABBREVIATION_Scoring, AGE_Scoring, GP_Scoring, W_Scoring, L_Scoring, W_PCT_Scoring, MIN_Scoring, PCT_FGA_2PT_Scoring, PCT_FGA_3PT_Scoring, PCT_PTS_2PT_Scoring, PCT_PTS_2PT_MR_Scoring, PCT_PTS_3PT_Scoring, PCT_PTS_FB_Scoring, PCT_PTS_FT_Scoring, PCT_PTS_OFF_TOV_Scoring, PCT_PTS_PAINT_Scoring, PCT_AST_2PM_Scoring, PCT_UAST_2PM_Scoring, PCT_AST_3PM_Scoring, PCT_UAST_3PM_Scoring, PCT_AST_FGM_Scoring, PCT_UAST_FGM_Scoring, FGM_Scoring, FGA_Scoring, FG_PCT_Scoring, GP_RANK_Scoring, W_RANK_Scoring, L_RANK_Scoring, W_PCT_RANK_Scoring, MIN_RANK_Scoring, PCT_FGA_2PT_RANK_Scoring, PCT_FGA_3PT_RANK_Scoring, PCT_PTS_2PT_RANK_Scoring, PCT_PTS_2PT_MR_RANK_Scoring, PCT_PTS_3PT_RANK_Scoring, PCT_PTS_FB_RANK_Scoring, PCT_PTS_FT_RANK_Scoring, PCT_PTS_OFF_TOV_RANK_Scoring, PCT_PTS_PAINT_RANK_Scoring, PCT_AST_2PM_RANK_Scoring, PCT_UAST_2PM_RANK_Scoring, PCT_AST_3PM_RANK_Scoring, PCT_UAST_3PM_RANK_Scoring, PCT_AST_FGM_RANK_Scoring, PCT_UAST_FGM_RANK_Scoring, FGM_RANK_Scoring, FGA_RANK_Scoring, FG_PCT_RANK_Scoring, TEAM_COUNT_Scoring, NICKNAME_Usage, TEAM_ID_Usage, TEAM_ABBREVIATION_Usage, AGE_Usage, GP_Usage, W_Usage, L_Usage, W_PCT_Usage, MIN_Usage, USG_PCT_Usage, PCT_FGM_Usage, PCT_FGA_Usage, PCT_FG3M_Usage, PCT_FG3A_Usage, PCT_FTM_Usage, PCT_FTA_Usage, PCT_OREB_Usage, PCT_DREB_Usage, PCT_REB_Usage, PCT_AST_Usage, PCT_TOV_Usage, PCT_STL_Usage, PCT_BLK_Usage, PCT_BLKA_Usage, PCT_PF_Usage, PCT_PFD_Usage, PCT_PTS_Usage, GP_RANK_Usage, W_RANK_Usage, L_RANK_Usage, W_PCT_RANK_Usage, MIN_RANK_Usage, USG_PCT_RANK_Usage, PCT_FGM_RANK_Usage, PCT_FGA_RANK_Usage, PCT_FG3M_RANK_Usage, PCT_FG3A_RANK_Usage, PCT_FTM_RANK_Usage, PCT_FTA_RANK_Usage, PCT_OREB_RANK_Usage, PCT_DREB_RANK_Usage, PCT_REB_RANK_Usage, PCT_AST_RANK_Usage, PCT_TOV_RANK_Usage, PCT_STL_RANK_Usage, PCT_BLK_RANK_Usage, PCT_BLKA_RANK_Usage, PCT_PF_RANK_Usage, PCT_PFD_RANK_Usage, PCT_PTS_RANK_Usage, TEAM_COUNT_Usage, NICKNAME_Defense, TEAM_ID_Defense, TEAM_ABBREVIATION_Defense, AGE_Defense, GP_Defense, W_Defense, L_Defense, W_PCT_Defense, MIN_Defense, DEF_RATING_Defense, DREB_Defense, DREB_PCT_Defense, PCT_DREB_Defense, STL_Defense, PCT_STL_Defense, BLK_Defense, PCT_BLK_Defense, OPP_PTS_OFF_TOV_Defense, OPP_PTS_2ND_CHANCE_Defense, OPP_PTS_FB_Defense, OPP_PTS_PAINT_Defense, DEF_WS_Defense, DEF_WS_RAW_Defense, GP_RANK_Defense, W_RANK_Defense, L_RANK_Defense, W_PCT_RANK_Defense, MIN_RANK_Defense, DEF_RATING_RANK_Defense, DREB_RANK_Defense, DREB_PCT_RANK_Defense, PCT_DREB_RANK_Defense, STL_RANK_Defense, PCT_STL_RANK_Defense, BLK_RANK_Defense, PCT_BLK_RANK_Defense, OPP_PTS_OFF_TOV_RANK_Defense, OPP_PTS_2ND_CHANCE_RANK_Defense, OPP_PTS_FB_RANK_Defense, OPP_PTS_PAINT_RANK_Defense, DEF_WS_RANK_Defense, MIN_AVG, FG3M_AVG, FGM_AVG, FTM_AVG, OREB_AVG, DREB_AVG, AST_AVG, TOV_AVG, STL_AVG, BLK_AVG, PF_AVG, PFD_AVG, PTS_OFF_TOV_Misc_AVG, PTS_2ND_CHANCE_Misc_AVG, PTS_FB_Misc_AVG, PTS_PAINT_Misc_AVG, OPP_PTS_OFF_TOV_Misc_AVG, OPP_PTS_2ND_CHANCE_Misc_AVG, OPP_PTS_FB_Misc_AVG, OPP_PTS_PAINT_Misc_AVG, OPP_PTS_OFF_TOV_Defense_AVG, OPP_PTS_FB_Defense_AVG, OPP_PTS_2ND_CHANCE_Defense_AVG, OPP_PTS_PAINT_Defense_AVG, POSS_Advanced_AVG, PTS_AVG, REB_AVG, cluster
+

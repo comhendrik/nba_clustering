@@ -1,0 +1,188 @@
+=== NBA 2024-25 Cluster & Regression Analysis ===
+
+=== Cluster-Summary (Medianwerte) ===
+          AGE    MIN_AVG   REB_AVG   AST_AVG   TOV_AVG   STL_AVG   BLK_AVG    PF_AVG   PFD_AVG    PTS_AVG
+cluster                                                                                                  
+0        27.0  28.000650  4.983051  2.633333  1.481481  0.885714  0.493506  2.222222  2.169811  13.066667
+1        27.0  33.201159  5.635135  5.130435  2.722222  1.151899  0.460000  2.157895  3.957143  21.766667
+2        25.0  20.736126  3.172703  1.540273  0.869307  0.627384  0.288681  1.691311  1.070809   7.925556
+
+Silhouette Coefficient: 0.2142
+
+=== Minuten pro Team und Cluster ===
+
+Team ATL:
+  Cluster 0: 111.2 Minuten
+  Cluster 1: 71.7 Minuten
+  Cluster 2: 84.2 Minuten
+
+Team BKN:
+  Cluster 0: 129.1 Minuten
+  Cluster 1: 0.0 Minuten
+  Cluster 2: 112.9 Minuten
+
+Team BOS:
+  Cluster 0: 121.6 Minuten
+  Cluster 1: 70.7 Minuten
+  Cluster 2: 81.9 Minuten
+
+Team CHA:
+  Cluster 0: 47.5 Minuten
+  Cluster 1: 63.7 Minuten
+  Cluster 2: 127.2 Minuten
+
+Team CHI:
+  Cluster 0: 61.5 Minuten
+  Cluster 1: 63.3 Minuten
+  Cluster 2: 111.2 Minuten
+
+Team CLE:
+  Cluster 0: 75.1 Minuten
+  Cluster 1: 92.6 Minuten
+  Cluster 2: 84.9 Minuten
+
+Team DAL:
+  Cluster 0: 135.8 Minuten
+  Cluster 1: 69.5 Minuten
+  Cluster 2: 70.3 Minuten
+
+Team DEN:
+  Cluster 0: 95.9 Minuten
+  Cluster 1: 100.7 Minuten
+  Cluster 2: 71.6 Minuten
+
+Team DET:
+  Cluster 0: 136.1 Minuten
+  Cluster 1: 35.0 Minuten
+  Cluster 2: 80.0 Minuten
+
+Team GSW:
+  Cluster 0: 112.1 Minuten
+  Cluster 1: 32.2 Minuten
+  Cluster 2: 90.6 Minuten
+
+Team HOU:
+  Cluster 0: 154.3 Minuten
+  Cluster 1: 64.4 Minuten
+  Cluster 2: 42.7 Minuten
+
+Team IND:
+  Cluster 0: 155.2 Minuten
+  Cluster 1: 0.0 Minuten
+  Cluster 2: 97.7 Minuten
+
+Team LAC:
+  Cluster 0: 57.8 Minuten
+  Cluster 1: 99.8 Minuten
+  Cluster 2: 112.2 Minuten
+
+Team LAL:
+  Cluster 0: 31.7 Minuten
+  Cluster 1: 105.2 Minuten
+  Cluster 2: 122.1 Minuten
+
+Team MEM:
+  Cluster 0: 68.3 Minuten
+  Cluster 1: 60.2 Minuten
+  Cluster 2: 115.4 Minuten
+
+Team MIA:
+  Cluster 0: 55.8 Minuten
+  Cluster 1: 69.7 Minuten
+  Cluster 2: 145.0 Minuten
+
+Team MIL:
+  Cluster 0: 106.8 Minuten
+  Cluster 1: 70.2 Minuten
+  Cluster 2: 90.0 Minuten
+
+Team MIN:
+  Cluster 0: 118.5 Minuten
+  Cluster 1: 68.6 Minuten
+  Cluster 2: 73.6 Minuten
+
+Team NOP:
+  Cluster 0: 44.6 Minuten
+  Cluster 1: 100.3 Minuten
+  Cluster 2: 115.3 Minuten
+
+Team NYK:
+  Cluster 0: 111.2 Minuten
+  Cluster 1: 70.3 Minuten
+  Cluster 2: 91.7 Minuten
+
+Team OKC:
+  Cluster 0: 55.3 Minuten
+  Cluster 1: 66.6 Minuten
+  Cluster 2: 137.1 Minuten
+
+Team ORL:
+  Cluster 0: 50.0 Minuten
+  Cluster 1: 128.7 Minuten
+  Cluster 2: 71.4 Minuten
+
+Team PHI:
+  Cluster 0: 88.5 Minuten
+  Cluster 1: 70.2 Minuten
+  Cluster 2: 96.1 Minuten
+
+Team PHX:
+  Cluster 0: 54.2 Minuten
+  Cluster 1: 73.8 Minuten
+  Cluster 2: 134.2 Minuten
+
+Team POR:
+  Cluster 0: 185.9 Minuten
+  Cluster 1: 30.0 Minuten
+  Cluster 2: 51.5 Minuten
+
+Team SAC:
+  Cluster 0: 89.1 Minuten
+  Cluster 1: 101.5 Minuten
+  Cluster 2: 75.4 Minuten
+
+Team SAS:
+  Cluster 0: 134.8 Minuten
+  Cluster 1: 69.3 Minuten
+  Cluster 2: 62.5 Minuten
+
+Team TOR:
+  Cluster 0: 86.8 Minuten
+  Cluster 1: 65.1 Minuten
+  Cluster 2: 106.0 Minuten
+
+Team UTA:
+  Cluster 0: 108.4 Minuten
+  Cluster 1: 89.9 Minuten
+  Cluster 2: 61.2 Minuten
+
+Team WAS:
+  Cluster 0: 139.4 Minuten
+  Cluster 1: 29.4 Minuten
+  Cluster 2: 89.9 Minuten
+
+
+=== Regression: Siege ~ Cluster-Minuten ===
+Koeffizienten:
+1    0.232518
+2    0.204573
+0    0.200578
+dtype: float64
+Intercept (Basis-Siege): -13.427
+R²: 0.0405
+Adjusted R²: -0.0703
+MAE: 10.7229
+MSE: 165.4248
+RMSE: 12.8618
+
+=== Dataset Info ===
+Total players: 300
+Teams: 30
+Features for clustering: 9
+Median AGE: 26.0
+Median MIN_AVG: 26.157384421134424
+Median PTS_AVG: 10.834767866458007
+Median REB_AVG: 4.026943942133816
+Median AST_AVG: 2.2432234432234432
+
+
