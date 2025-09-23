@@ -166,15 +166,64 @@ merged = team_segment_minutes.merge(team_wins, on="TEAM_ABBREVIATION", how="inne
 X_reg = merged.drop(columns=["WINS", "TEAM_ABBREVIATION"])
 y_reg = merged["WINS"]
 
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import r2_score, mean_squared_error, mean_absolute_error
+import numpy as np
+import pandas as pd
+import os
+
+# Modell anpassen
 reg = LinearRegression()
 reg.fit(X_reg, y_reg)
+
+# Vorhersagen berechnen
+y_pred = reg.predict(X_reg)
+
+# Kennzahlen berechnen
+r2 = r2_score(y_reg, y_pred)
+adj_r2 = 1 - (1 - r2) * (len(y_reg) - 1) / (len(y_reg) - X_reg.shape[1] - 1)
+mse = mean_squared_error(y_reg, y_pred)
+rmse = np.sqrt(mse)
+mae = mean_absolute_error(y_reg, y_pred)
+
+# Koeffizienten sortieren
 coefficients = pd.Series(reg.coef_, index=X_reg.columns).sort_values(ascending=False)
+
+# Ergebnisse speichern
 regression_path = os.path.join(output_dir, "regression_results.txt")
 with open(regression_path, "w") as f:
     f.write("--- Einfluss der Segmente auf Siege (Linear Regression) ---\n")
-    f.write(str(coefficients))
-    f.write(f"\nIntercept: {reg.intercept_}")
+    f.write(coefficients.to_string())
+    f.write(f"\n\nIntercept: {reg.intercept_:.4f}")
+    f.write(f"\nR²: {r2:.4f}")
+    f.write(f"\nAdjusted R²: {adj_r2:.4f}")
+    f.write(f"\nMSE: {mse:.4f}")
+    f.write(f"\nRMSE: {rmse:.4f}")
+    f.write(f"\nMAE: {mae:.4f}")
+
 print(f"Regression results saved to {regression_path}")
+
+import statsmodels.api as sm
+import pandas as pd
+import os
+
+# 1️⃣ Konstante hinzufügen (Intercept)
+X_with_const = sm.add_constant(X_reg)
+
+# 2️⃣ Modell schätzen
+model = sm.OLS(y_reg, X_with_const)
+results = model.fit()
+
+# 3️⃣ Zusammenfassung anzeigen
+print(results.summary())
+
+# 4️⃣ Ergebnisse in Datei speichern
+output_path = os.path.join(output_dir, "regression_detailed_results.txt")
+with open(output_path, "w") as f:
+    f.write(results.summary().as_text())
+
+print(f"Detaillierte Regressionsergebnisse gespeichert unter: {output_path}")
+
 
 # ==============================================
 # 8. Segment counts plot

@@ -6,5 +6,10 @@ Offensive        0.416743
 Rebounder/Big    0.279057
 Playmaker        0.072338
 Other            0.000000
-dtype: float64
-Intercept: -41.983326275937245
+
+Intercept: -41.9833
+R²: 0.3600
+Adjusted R²: 0.1563
+MSE: 110.3415
+RMSE: 10.5044
+MAE: 8.4289

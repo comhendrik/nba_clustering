@@ -1,6 +1,10 @@
 Cluster-Profile (Medianwerte mit Height & Weight):
-         USG_PCT  PCT_FGM  PCT_FG3M  PCT_FTM  PCT_OREB  PCT_DREB  PCT_AST  PCT_TOV  PCT_STL  PCT_BLK  PCT_PF  PCT_PFD  PCT_PTS
-cluster                                                                                                                       
-0          0.160    0.167    0.2165    0.117     0.153     0.157   0.1345    0.140    0.196    0.125   0.191   0.1365    0.170
-1          0.161    0.194    0.0450    0.177     0.408     0.289   0.1460    0.160    0.175    0.410   0.252   0.2120    0.181
-2          0.246    0.246    0.2470    0.303     0.109     0.173   0.2890    0.264    0.205    0.120   0.173   0.2700    0.256
+          AGE  OFF_RATING_Advanced  DEF_RATING_Advanced  ...  OPP_PTS_PAINT_Defense  DEF_WS_Defense  DEF_WS_RAW_Defense
+cluster                                                  ...                                                           
+0        25.0               110.10                111.6  ...                 1248.0           3.740            3.737690
+1        27.0               115.00                113.3  ...                 2373.0           6.585            6.583073
+2        25.0               104.50                108.3  ...                  122.0           0.510            0.507682
+3        25.0               109.35                111.1  ...                  653.0           2.100            2.099351
+4        26.0               112.30                113.4  ...                 1806.0           5.080            5.076061
+
+[5 rows x 33 columns]

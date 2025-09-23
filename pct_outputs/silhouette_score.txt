@@ -1,1 +1,1 @@
-Silhouette Coefficient for 3 clusters: 0.3128
+Silhouette Coefficient for 5 clusters: 0.5545
