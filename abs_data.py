@@ -35,7 +35,7 @@ else:
 # ==============================================
 # 2. Features für Clustering
 # ==============================================
-base_cols = ["OREB", "DREB", "AST", "TOV", "STL", "BLK", "PF", "PFD", "PTS"]
+base_cols  = ["OREB", "DREB", "AST", "TOV", "STL", "BLK", "PF", "PFD", "FGM", "FG3M", "FTM"]
 features = [f"{col}_{mode}" for col in base_cols]
 
 missing = [f for f in features if f not in filtered_players.columns]
@@ -51,8 +51,17 @@ scaler = MinMaxScaler(feature_range=(0, 1))
 X_scaled = scaler.fit_transform(X)
 
 base_feature_weights = {
-    "OREB": 0.1, "DREB": 0.45, "AST": 0.3, "TOV": 0.68,
-    "STL": 0.33, "BLK": 0.2, "PF": 0.2, "PFD": 0.12, "PTS": 0.73,
+    "FGM": 0.666284,
+    "DREB": 0.454771,
+    "FG3M": 0.403160,
+    "STL": 0.334396,
+    "AST": 0.302946,
+    "FTM": 0.211148,
+    "BLK": 0.205620,
+    "PFD": 0.123648,
+    "OREB": 0.101541,
+    "PF": 0.205090,
+    "TOV": 0.680298
 }
 feature_weights = {f"{k}_{mode}": v for k, v in base_feature_weights.items()}
 weights_array = np.array([feature_weights[f] for f in features])

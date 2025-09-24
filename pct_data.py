@@ -45,11 +45,30 @@ if missing:
 
 X = filtered_players[features].fillna(0)
 
+feature_map = {
+    'USG_PCT_Usage': 1,          # Placeholder, can be set based on usage calculation
+    'PCT_FGM_Usage': 0.666284,
+    'PCT_FG3M_Usage': 0.403160,
+    'PCT_FTM_Usage': 0.211148,
+    'PCT_OREB_Usage': 0.101541,
+    'PCT_DREB_Usage': 0.454771,
+    'PCT_AST_Usage': 0.302946,
+    'PCT_TOV_Usage': 0.680298,
+    'PCT_STL_Usage': 0.334396,
+    'PCT_BLK_Usage': 0.205620,
+    'PCT_PF_Usage': 0.205090,
+    'PCT_PFD_Usage': 0.123648
+}
+
+feature_weights = {f"{k}": v for k, v in feature_map.items()}
+weights_array = np.array([feature_weights[f] for f in features])
+X_weighted = X * weights_array
+
 # ==============================================
 # 3. KMeans Clustering
 # ==============================================
 kmeans = KMeans(init="k-means++", n_init=50, n_clusters=cluster_size, random_state=42)
-filtered_players["cluster"] = kmeans.fit_predict(X)
+filtered_players["cluster"] = kmeans.fit_predict(X_weighted)
 
 # ==============================================
 # 4. Cluster-Summary

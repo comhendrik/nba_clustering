@@ -39,7 +39,7 @@ player_stats = leaguedashplayerstats.LeagueDashPlayerStats(
 # Features mit PCT_* (alle Usage-basiert)
 base_metrics = [
     'PCT_OREB', 'PCT_DREB', 'PCT_AST', 'PCT_TOV',
-    'PCT_STL', 'PCT_BLK', 'PCT_PTS', 'PCT_FG3M', 'PCT_FG3A'
+    'PCT_STL', 'PCT_BLK', 'PCT_PTS', 'PCT_FG3M', 'PCT_FGM'
 ]
 
 
@@ -55,7 +55,7 @@ prediction_features = [f"{m}_Usage" for m in base_metrics]
 # ==============================================
 # 2. Quartil-Schwellen berechnen
 # ==============================================
-quartile_thresholds = {col: player_stats[col].quantile(0.60) for col in prediction_features}
+quartile_thresholds = {col: player_stats[col].quantile(0.75) for col in prediction_features}
 
 # ==============================================
 # 3. Multi-Label Archetype-Zuweisung
@@ -64,43 +64,53 @@ def segment_player_multilabel(row):
     labels = []
 
     # --- Spezifische Archetypen ---
-    if row["PCT_OREB_Usage"] >= quartile_thresholds["PCT_OREB_Usage"] or row["PCT_DREB_Usage"] >= quartile_thresholds["PCT_DREB_Usage"]:
-        labels.append("Rebounder/Big")
+    if row["PCT_FG3M_Usage"] >= quartile_thresholds["PCT_FG3M_Usage"]:
+        labels.append("Shooter")
 
-    if row["PCT_AST_Usage"] >= quartile_thresholds["PCT_AST_Usage"] and row["PCT_PTS_Usage"] < quartile_thresholds["PCT_PTS_Usage"]:
-        labels.append("Playmaker")
+    if row["PCT_FGM_Usage"] >= quartile_thresholds["PCT_FGM_Usage"]:
+        labels.append("Slasher")
 
     if (
-        row["PCT_PTS_Usage"] >= quartile_thresholds["PCT_PTS_Usage"] / 2
-        and (
-            row["PCT_FG3M_Usage"] >= quartile_thresholds["PCT_FG3M_Usage"]
-            or row["PCT_FG3A_Usage"] >= quartile_thresholds["PCT_FG3A_Usage"]
-        )
-    ):
-        labels.append("3&D/Stretch")
-
-    # --- Allgemeine Archetypen ---
-    offensive = (
-        row["PCT_PTS_Usage"] >= quartile_thresholds["PCT_PTS_Usage"]
-        or row["PCT_AST_Usage"] >= quartile_thresholds["PCT_AST_Usage"]
-    )
-    defensive = (
         row["PCT_STL_Usage"] >= quartile_thresholds["PCT_STL_Usage"]
         or row["PCT_BLK_Usage"] >= quartile_thresholds["PCT_BLK_Usage"]
-        or row["PCT_DREB_Usage"] >= quartile_thresholds["PCT_DREB_Usage"]
-    )
-
-    if offensive and defensive:
-        labels.append("Two-Way")
-    elif offensive:
-        labels.append("Offensive")
-    elif defensive:
+    ):
         labels.append("Defensive")
+
+    if (
+        row["PCT_OREB_Usage"] >= quartile_thresholds["PCT_OREB_Usage"]
+        or row["PCT_DREB_Usage"] >= quartile_thresholds["PCT_DREB_Usage"]
+    ):
+        labels.append("Rebounder/Big")
+
+    if row["PCT_AST_Usage"] >= quartile_thresholds["PCT_AST_Usage"]:
+        labels.append("Playmaker")
 
     if not labels:
         labels.append("Other")
 
+    # --- Smart collapse to single label ---
+    if len(labels) > 1:
+        # Example rule: Shooter + Slasher = Offensive
+        if "Shooter" in labels and "Slasher" in labels:
+            return ["Offensive"]
+
+        # Example: Defensive + Rebounder/Big = Anchor
+        if "Defensive" in labels and "Rebounder/Big" in labels:
+            return ["Anchor"]
+
+        # Example: Playmaker + Shooter = Offensive Playmaker
+        if "Playmaker" in labels and "Shooter" in labels:
+            return ["Offensive Playmaker"]
+
+        # Example: Playmaker + Defensive = Two-Way
+        if "Playmaker" in labels and "Defensive" in labels:
+            return ["Two-Way"]
+
+        # Fallback: if no smart combo defined → take the first label
+        return [labels[0]]
+
     return labels
+
 
 # Anwenden
 player_stats["Archetype"] = player_stats.apply(segment_player_multilabel, axis=1)
@@ -131,21 +141,17 @@ df = pd.read_csv(csv_file)
 df["Archetype"] = lda.predict(df[prediction_features].fillna(0))
 
 # ==============================================
-# 6. Binary Indicator Columns für Archetypen
+# 6. Archetype Grouping
 # ==============================================
-all_types = ["Rebounder/Big", "Playmaker", "3&D/Stretch", "Two-Way", "Offensive", "Defensive", "Other"]
-for t in all_types:
-    df[t] = (df["Archetype"] == t).astype(int)
-
-# ==============================================
-# 7. Minuten pro Team & Archetyp
-# ==============================================
-minutes_weighted = df[all_types].multiply(df["MIN_AVG"], axis=0)
-team_segment_minutes = df[["TEAM_ABBREVIATION"]].join(minutes_weighted).groupby("TEAM_ABBREVIATION").sum()
+team_archetype_minutes = (
+    df.groupby(["TEAM_ABBREVIATION", "Archetype"])["MIN_AVG"]
+    .sum()
+    .unstack(fill_value=0)
+)
 
 with open(report_path, "a") as report:
     report.write("=== Minuten pro Team & Archetyp ===\n")
-    report.write(team_segment_minutes.to_string())
+    report.write(team_archetype_minutes.to_string())
     report.write("\n\n")
 
 # ==============================================
@@ -157,7 +163,7 @@ team_map = {t["id"]: t["abbreviation"] for t in nba_teams}
 standings["TEAM_ABBREVIATION"] = standings["TeamID"].map(team_map)
 team_wins = standings[["TEAM_ABBREVIATION", "WINS"]]
 
-merged = team_segment_minutes.merge(team_wins, on="TEAM_ABBREVIATION", how="inner")
+merged = team_archetype_minutes.merge(team_wins, on="TEAM_ABBREVIATION", how="inner")
 X_reg = merged.drop(columns=["WINS", "TEAM_ABBREVIATION"])
 y_reg = merged["WINS"]
 
@@ -197,12 +203,19 @@ plt.close()
 # ==============================================
 # 9. Segmentverteilung Plot
 # ==============================================
-type_counts = {t: df[t].sum() for t in all_types}
-plt.figure(figsize=(8, 5))
-pd.Series(type_counts).sort_values().plot(kind="bar", color="skyblue", edgecolor="black")
-plt.title("Spieler-Segmente (nach Minuten)")
+
+archetype_counts = df["Archetype"].value_counts().reset_index()
+archetype_counts.columns = ["Archetype", "Count"]  # fix column names
+
+archetype_counts.set_index("Archetype")["Count"].sort_values().plot(
+    kind="bar",
+    color="skyblue",
+    edgecolor="black",
+    figsize=(8, 5),
+    title="Archetype Counts"
+)
 plt.xlabel("Archetyp")
-plt.ylabel("Gesamt-Minuten")
+plt.ylabel("Spieleranzahl")
 plt.tight_layout()
 plt.savefig(os.path.join(output_dir, "segment_distribution.png"), dpi=300)
 plt.close()
