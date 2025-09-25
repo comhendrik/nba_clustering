@@ -99,11 +99,11 @@ def segment_player_multilabel(row):
             return ["Anchor"]
 
         # Example: Playmaker + Shooter = Offensive Playmaker
-        if "Playmaker" in labels and "Shooter" in labels:
+        if ("Playmaker" in labels and "Shooter" in labels) or ("Playmaker" in labels and "Slasher" in labels):
             return ["Offensive Playmaker"]
 
         # Example: Playmaker + Defensive = Two-Way
-        if "Playmaker" in labels and "Defensive" in labels:
+        if ("Shooter" in labels and "Defensive" in labels) or ("Slasher" in labels and "Defensive" in labels):
             return ["Two-Way"]
 
         # Fallback: if no smart combo defined → take the first label
