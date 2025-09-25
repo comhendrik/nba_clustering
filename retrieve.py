@@ -3,9 +3,9 @@ import pandas as pd
 from functools import reduce
 
 # ----- Settings -----
-SEASON = "2024-25"
+SEASON = "2022-23"
 SEASON_TYPE = "Regular Season"
-OUTPUT_FILE = "nba_player_stats_2024_25.csv"
+OUTPUT_FILE = "nba_player_stats_2022_23.csv"
 
 # ----- Measure types -----
 measure_types = ["Base", "Advanced", "Misc", "Scoring", "Usage", "Defense"]

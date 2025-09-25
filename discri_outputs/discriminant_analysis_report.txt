@@ -53,17 +53,87 @@ UTA                60.517809   0.000000  27.900952            31.469776   21.192
 WAS                48.699540  59.511284  29.424804            42.798694   22.013333  29.973049       0.000000  26.254481   0.000000   0.000000
 
 === Regression: Siege ~ Archetyp-Minuten ===
-Defensive              0.675372
-Slasher                0.647715
-Other                  0.528602
-Anchor                 0.453791
-Two-Way                0.443414
-Offensive Playmaker    0.391748
-Shooter                0.367011
-Offensive              0.293442
-Rebounder/Big          0.156785
-Playmaker             -0.043301
-Intercept: -68.096
-R²: 0.4227, Adjusted R²: 0.1189
-MAE: 8.0290, MSE: 99.5249, RMSE: 9.9762
+Other                  0.238466
+Defensive              0.148932
+Anchor                 0.138456
+Offensive              0.129891
+Shooter                0.116637
+Offensive Playmaker    0.082411
+Playmaker              0.057710
+Slasher                0.046929
+Rebounder/Big          0.029868
+Two-Way                0.010700
+R²: 0.8532, Adjusted R²: 0.7759
+MAE: 3.8049, MSE: 25.3140, RMSE: 5.0313
+
+=== Teamweise Prognose vs. Realität ===
+TEAM_ABBREVIATION  Predicted_Wins  Real_Wins
+              ATL           40.42         40
+              BKN           31.91         26
+              BOS           51.79         61
+              CHA           30.16         19
+              CHI           39.17         39
+              CLE           53.89         64
+              DAL           39.47         39
+              DEN           47.44         50
+              DET           44.23         44
+              GSW           47.94         48
+              HOU           46.97         52
+              IND           48.79         50
+              LAC           45.00         50
+              LAL           47.24         50
+              MEM           44.83         48
+              MIA           40.46         37
+              MIL           46.87         48
+              MIN           43.86         49
+              NOP           26.23         21
+              NYK           49.85         51
+              OKC           59.56         68
+              ORL           40.38         41
+              PHI           30.76         24
+              PHX           35.65         36
+              POR           34.46         36
+              SAC           42.77         40
+              SAS           36.10         34
+              TOR           31.70         30
+              UTA           24.54         17
+              WAS           26.74         18
+
+=== Regression: Siege ~ Archetyp-Minuten (Season 2023-24) ===
+
+R²: -0.0573, Adjusted R²: -0.6138
+MAE: 11.2363, MSE: 183.8291, RMSE: 13.5584
+
+=== Teamweise Prognose vs. Realität (2023-24) ===
+TEAM_ABBREVIATION  Predicted_Wins  Real_Wins
+              ATL           50.40         36
+              BKN           40.43         32
+              BOS           34.37         64
+              CHA           42.28         21
+              CHI           41.36         39
+              CLE           41.27         48
+              DAL           32.02         50
+              DEN           45.67         57
+              DET           45.98         14
+              GSW           41.56         46
+              HOU           42.70         41
+              IND           45.11         47
+              LAC           33.12         51
+              LAL           42.72         47
+              MEM           38.73         27
+              MIA           40.45         46
+              MIL           42.93         49
+              MIN           42.20         56
+              NOP           38.39         49
+              NYK           32.30         50
+              OKC           44.47         57
+              ORL           36.11         47
+              PHI           45.02         47
+              PHX           38.27         49
+              POR           37.74         21
+              SAC           42.89         46
+              SAS           37.36         22
+              TOR           31.27         25
+              UTA           36.34         31
+              WAS           29.38         15
 

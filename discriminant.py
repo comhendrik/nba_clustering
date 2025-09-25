@@ -167,29 +167,33 @@ merged = team_archetype_minutes.merge(team_wins, on="TEAM_ABBREVIATION", how="in
 X_reg = merged.drop(columns=["WINS", "TEAM_ABBREVIATION"])
 y_reg = merged["WINS"]
 
-reg = LinearRegression()
-reg.fit(X_reg, y_reg)
-y_pred = reg.predict(X_reg)
+from sklearn.ensemble import RandomForestRegressor
+
+rf = RandomForestRegressor(n_estimators=500, random_state=42)
+rf.fit(X_reg, y_reg)
+y_pred_reg = rf.predict(X_reg)
+
+
 
 # Metriken
-r2 = r2_score(y_reg, y_pred)
+r2 = r2_score(y_reg, y_pred_reg)
 adj_r2 = 1 - (1 - r2) * (len(y_reg) - 1) / (len(y_reg) - X_reg.shape[1] - 1)
-mse = mean_squared_error(y_reg, y_pred)
+mse = mean_squared_error(y_reg, y_pred_reg)
 rmse = np.sqrt(mse)
-mae = mean_absolute_error(y_reg, y_pred)
+mae = mean_absolute_error(y_reg, y_pred_reg)
 
-coefficients = pd.Series(reg.coef_, index=X_reg.columns).sort_values(ascending=False)
+coefficients = pd.Series(rf.feature_importances_, index=X_reg.columns).sort_values(ascending=False)
 
 with open(report_path, "a") as report:
     report.write("=== Regression: Siege ~ Archetyp-Minuten ===\n")
     report.write(coefficients.to_string())
-    report.write(f"\nIntercept: {reg.intercept_:.3f}\n")
+    
     report.write(f"R²: {r2:.4f}, Adjusted R²: {adj_r2:.4f}\n")
     report.write(f"MAE: {mae:.4f}, MSE: {mse:.4f}, RMSE: {rmse:.4f}\n\n")
 
 # Regression Fit Plot
 plt.figure(figsize=(7, 5))
-sns.regplot(x=y_reg, y=y_pred, ci=None, line_kws={"color": "red"})
+sns.regplot(x=y_reg, y=y_pred_reg, ci=None, line_kws={"color": "red"})
 plt.xlabel("Tatsächliche Siege")
 plt.ylabel("Vorhergesagte Siege")
 plt.title("Regression: Siege ~ Archetyp-Minuten")
@@ -199,6 +203,17 @@ plt.annotate(f"R²={r2:.3f}, Adj.R²={adj_r2:.3f}\nRMSE={rmse:.2f}",
 plt.tight_layout()
 plt.savefig(os.path.join(output_dir, "regression_fit.png"), dpi=300)
 plt.close()
+
+team_results = pd.DataFrame({
+    "TEAM_ABBREVIATION": merged["TEAM_ABBREVIATION"],
+    "Predicted_Wins": np.round(y_pred_reg, 2),
+    "Real_Wins": y_reg.values
+})
+
+with open(report_path, "a") as report:
+    report.write("=== Teamweise Prognose vs. Realität ===\n")
+    report.write(team_results.to_string(index=False))
+    report.write("\n\n")
 
 # ==============================================
 # 9. Segmentverteilung Plot
@@ -221,3 +236,68 @@ plt.savefig(os.path.join(output_dir, "segment_distribution.png"), dpi=300)
 plt.close()
 
 print(f"Analyse abgeschlossen. Alle Ergebnisse in '{report_path}' und Plots in '{output_dir}' gespeichert.")
+
+
+# ==============================================
+# 10. Option: Predictions for 2023-24 from CSV
+# ==============================================
+csv_file_23 = "nba_player_stats_2023_24.csv"
+if os.path.exists(csv_file_23):
+    df23 = pd.read_csv(csv_file_23)
+    df23["Archetype"] = lda.predict(df23[prediction_features].fillna(0))
+
+    team_archetype_minutes_23 = (
+        df23.groupby(["TEAM_ABBREVIATION", "Archetype"])["MIN_AVG"]
+        .sum()
+        .unstack(fill_value=0)
+    )
+
+    standings_23 = leaguestandings.LeagueStandings(season="2023-24", league_id="00").get_data_frames()[0]
+    standings_23["TEAM_ABBREVIATION"] = standings_23["TeamID"].map(team_map)
+    team_wins_23 = standings_23[["TEAM_ABBREVIATION", "WINS"]]
+
+    merged_23 = team_archetype_minutes_23.merge(team_wins_23, on="TEAM_ABBREVIATION", how="inner")
+    X_reg_23 = merged_23.drop(columns=["WINS", "TEAM_ABBREVIATION"])
+    y_reg_23 = merged_23["WINS"]
+
+    # Polynomial regression again
+    y_pred_reg_23 = rf.predict(X_reg_23)
+
+    # Metrics
+    r2_23 = r2_score(y_reg_23, y_pred_reg_23)
+    adj_r2_23 = 1 - (1 - r2_23) * (len(y_reg_23) - 1) / (len(y_reg_23) - X_reg_23.shape[1] - 1)
+    mse_23 = mean_squared_error(y_reg_23, y_pred_reg_23)
+    rmse_23 = np.sqrt(mse_23)
+    mae_23 = mean_absolute_error(y_reg_23, y_pred_reg_23)
+
+
+    # Save to report
+    with open(report_path, "a") as report:
+        report.write("=== Regression: Siege ~ Archetyp-Minuten (Season 2023-24) ===\n")
+        report.write(f"\nR²: {r2_23:.4f}, Adjusted R²: {adj_r2_23:.4f}\n")
+        report.write(f"MAE: {mae_23:.4f}, MSE: {mse_23:.4f}, RMSE: {rmse_23:.4f}\n\n")
+
+    # Fit plot
+    plt.figure(figsize=(7, 5))
+    sns.regplot(x=y_reg_23, y=y_pred_reg_23, ci=None, line_kws={"color": "red"})
+    plt.xlabel("Tatsächliche Siege (2023-24)")
+    plt.ylabel("Vorhergesagte Siege (2023-24)")
+    plt.title("Regression: Siege ~ Archetyp-Minuten (2023-24)")
+    plt.annotate(f"R²={r2_23:.3f}, Adj.R²={adj_r2_23:.3f}\nRMSE={rmse_23:.2f}",
+                 xy=(0.05, 0.85), xycoords="axes fraction",
+                 fontsize=10, bbox=dict(boxstyle="round,pad=0.3", facecolor="white"))
+    plt.tight_layout()
+    plt.savefig(os.path.join(output_dir, "regression_fit_2023_24.png"), dpi=300)
+    plt.close()
+
+    # Team results table
+    team_results_23 = pd.DataFrame({
+        "TEAM_ABBREVIATION": merged_23["TEAM_ABBREVIATION"],
+        "Predicted_Wins": np.round(y_pred_reg_23, 2),
+        "Real_Wins": y_reg_23.values
+    })
+
+    with open(report_path, "a") as report:
+        report.write("=== Teamweise Prognose vs. Realität (2023-24) ===\n")
+        report.write(team_results_23.to_string(index=False))
+        report.write("\n\n")

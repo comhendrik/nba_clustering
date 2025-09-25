@@ -3,186 +3,186 @@
 === Cluster-Summary (Medianwerte) ===
           AGE    MIN_AVG   REB_AVG   AST_AVG   TOV_AVG   STL_AVG   BLK_AVG    PF_AVG   PFD_AVG    PTS_AVG
 cluster                                                                                                  
-0        27.0  33.111577  5.347826  5.027778  2.585366  1.148936  0.460000  2.123077  3.875000  21.513514
-1        27.0  27.864632  5.045312  2.481283  1.440686  0.877500  0.500000  2.211111  2.089669  12.698052
-2        25.0  20.519532  3.053333  1.552632  0.867647  0.637931  0.265823  1.666667  1.063492   7.911111
+0        26.0  28.942089  4.513889  2.776316  1.537500  0.855263  0.460526  2.333333  2.166667  13.112676
+1        25.0  19.991586  3.186441  1.342466  0.836066  0.558140  0.285714  1.651163  1.137500   7.443038
+2        26.5  34.625172  5.289395  5.324865  2.791486  0.963891  0.408173  2.250460  4.111264  23.176923
 
-Silhouette Coefficient: 0.2069
+Silhouette Coefficient: 0.2231
 
 === Minuten pro Team und Cluster ===
 
 Team ATL:
-  Cluster 0: 71.7 Minuten
-  Cluster 1: 132.6 Minuten
-  Cluster 2: 62.8 Minuten
+  Cluster 0: 143.9 Minuten
+  Cluster 1: 57.5 Minuten
+  Cluster 2: 71.2 Minuten
 
 Team BKN:
-  Cluster 0: 0.0 Minuten
-  Cluster 1: 129.1 Minuten
-  Cluster 2: 112.9 Minuten
+  Cluster 0: 186.7 Minuten
+  Cluster 1: 87.5 Minuten
+  Cluster 2: 0.0 Minuten
 
 Team BOS:
-  Cluster 0: 70.7 Minuten
-  Cluster 1: 121.6 Minuten
-  Cluster 2: 81.9 Minuten
+  Cluster 0: 86.4 Minuten
+  Cluster 1: 111.0 Minuten
+  Cluster 2: 72.8 Minuten
 
 Team CHA:
-  Cluster 0: 63.7 Minuten
-  Cluster 1: 47.5 Minuten
-  Cluster 2: 127.2 Minuten
+  Cluster 0: 122.1 Minuten
+  Cluster 1: 71.4 Minuten
+  Cluster 2: 70.5 Minuten
 
 Team CHI:
-  Cluster 0: 94.6 Minuten
-  Cluster 1: 30.3 Minuten
-  Cluster 2: 111.2 Minuten
+  Cluster 0: 33.5 Minuten
+  Cluster 1: 155.2 Minuten
+  Cluster 2: 72.2 Minuten
 
 Team CLE:
-  Cluster 0: 92.6 Minuten
-  Cluster 1: 75.1 Minuten
-  Cluster 2: 84.9 Minuten
+  Cluster 0: 97.3 Minuten
+  Cluster 1: 97.3 Minuten
+  Cluster 2: 71.2 Minuten
 
 Team DAL:
-  Cluster 0: 69.5 Minuten
-  Cluster 1: 108.8 Minuten
-  Cluster 2: 97.3 Minuten
-
-Team DEN:
-  Cluster 0: 100.7 Minuten
-  Cluster 1: 95.9 Minuten
-  Cluster 2: 71.6 Minuten
-
-Team DET:
-  Cluster 0: 35.0 Minuten
-  Cluster 1: 136.1 Minuten
-  Cluster 2: 80.0 Minuten
-
-Team GSW:
-  Cluster 0: 32.2 Minuten
-  Cluster 1: 112.1 Minuten
-  Cluster 2: 90.6 Minuten
-
-Team HOU:
-  Cluster 0: 64.4 Minuten
-  Cluster 1: 154.3 Minuten
-  Cluster 2: 42.7 Minuten
-
-Team IND:
-  Cluster 0: 33.6 Minuten
-  Cluster 1: 121.6 Minuten
-  Cluster 2: 97.7 Minuten
-
-Team LAC:
-  Cluster 0: 99.8 Minuten
-  Cluster 1: 79.7 Minuten
-  Cluster 2: 90.2 Minuten
-
-Team LAL:
-  Cluster 0: 105.2 Minuten
-  Cluster 1: 31.7 Minuten
-  Cluster 2: 122.1 Minuten
-
-Team MEM:
-  Cluster 0: 60.2 Minuten
-  Cluster 1: 68.3 Minuten
-  Cluster 2: 115.4 Minuten
-
-Team MIA:
-  Cluster 0: 69.7 Minuten
-  Cluster 1: 78.1 Minuten
-  Cluster 2: 122.7 Minuten
-
-Team MIL:
-  Cluster 0: 70.2 Minuten
-  Cluster 1: 106.8 Minuten
-  Cluster 2: 90.0 Minuten
-
-Team MIN:
-  Cluster 0: 68.6 Minuten
-  Cluster 1: 118.5 Minuten
+  Cluster 0: 56.3 Minuten
+  Cluster 1: 130.4 Minuten
   Cluster 2: 73.6 Minuten
 
+Team DEN:
+  Cluster 0: 143.4 Minuten
+  Cluster 1: 53.4 Minuten
+  Cluster 2: 66.5 Minuten
+
+Team DET:
+  Cluster 0: 105.1 Minuten
+  Cluster 1: 82.6 Minuten
+  Cluster 2: 63.2 Minuten
+
+Team GSW:
+  Cluster 0: 90.0 Minuten
+  Cluster 1: 76.9 Minuten
+  Cluster 2: 97.7 Minuten
+
+Team HOU:
+  Cluster 0: 131.3 Minuten
+  Cluster 1: 41.3 Minuten
+  Cluster 2: 68.5 Minuten
+
+Team IND:
+  Cluster 0: 137.0 Minuten
+  Cluster 1: 79.5 Minuten
+  Cluster 2: 33.6 Minuten
+
+Team LAC:
+  Cluster 0: 109.1 Minuten
+  Cluster 1: 73.1 Minuten
+  Cluster 2: 97.3 Minuten
+
+Team LAL:
+  Cluster 0: 108.8 Minuten
+  Cluster 1: 70.9 Minuten
+  Cluster 2: 102.0 Minuten
+
+Team MEM:
+  Cluster 0: 58.7 Minuten
+  Cluster 1: 126.4 Minuten
+  Cluster 2: 63.7 Minuten
+
+Team MIA:
+  Cluster 0: 91.0 Minuten
+  Cluster 1: 121.5 Minuten
+  Cluster 2: 69.5 Minuten
+
+Team MIL:
+  Cluster 0: 56.4 Minuten
+  Cluster 1: 126.9 Minuten
+  Cluster 2: 64.7 Minuten
+
+Team MIN:
+  Cluster 0: 138.3 Minuten
+  Cluster 1: 60.9 Minuten
+  Cluster 2: 69.0 Minuten
+
 Team NOP:
-  Cluster 0: 100.3 Minuten
-  Cluster 1: 71.4 Minuten
-  Cluster 2: 88.5 Minuten
+  Cluster 0: 109.0 Minuten
+  Cluster 1: 83.7 Minuten
+  Cluster 2: 69.5 Minuten
 
 Team NYK:
-  Cluster 0: 70.3 Minuten
-  Cluster 1: 111.2 Minuten
-  Cluster 2: 91.7 Minuten
+  Cluster 0: 61.2 Minuten
+  Cluster 1: 108.0 Minuten
+  Cluster 2: 104.4 Minuten
 
 Team OKC:
-  Cluster 0: 66.6 Minuten
-  Cluster 1: 55.3 Minuten
-  Cluster 2: 137.1 Minuten
+  Cluster 0: 61.0 Minuten
+  Cluster 1: 115.6 Minuten
+  Cluster 2: 66.7 Minuten
 
 Team ORL:
-  Cluster 0: 128.7 Minuten
-  Cluster 1: 50.0 Minuten
-  Cluster 2: 71.4 Minuten
+  Cluster 0: 162.8 Minuten
+  Cluster 1: 60.1 Minuten
+  Cluster 2: 33.7 Minuten
 
 Team PHI:
-  Cluster 0: 70.2 Minuten
-  Cluster 1: 88.5 Minuten
-  Cluster 2: 96.1 Minuten
+  Cluster 0: 94.4 Minuten
+  Cluster 1: 103.9 Minuten
+  Cluster 2: 71.4 Minuten
 
 Team PHX:
-  Cluster 0: 73.8 Minuten
-  Cluster 1: 54.2 Minuten
-  Cluster 2: 134.2 Minuten
+  Cluster 0: 82.6 Minuten
+  Cluster 1: 99.1 Minuten
+  Cluster 2: 70.2 Minuten
 
 Team POR:
-  Cluster 0: 94.0 Minuten
-  Cluster 1: 121.9 Minuten
-  Cluster 2: 51.5 Minuten
+  Cluster 0: 62.4 Minuten
+  Cluster 1: 121.3 Minuten
+  Cluster 2: 71.3 Minuten
 
 Team SAC:
-  Cluster 0: 101.5 Minuten
-  Cluster 1: 89.1 Minuten
-  Cluster 2: 75.4 Minuten
+  Cluster 0: 84.2 Minuten
+  Cluster 1: 88.3 Minuten
+  Cluster 2: 68.0 Minuten
 
 Team SAS:
-  Cluster 0: 69.3 Minuten
-  Cluster 1: 134.8 Minuten
-  Cluster 2: 62.5 Minuten
+  Cluster 0: 109.1 Minuten
+  Cluster 1: 103.7 Minuten
+  Cluster 2: 32.8 Minuten
 
 Team TOR:
-  Cluster 0: 65.1 Minuten
-  Cluster 1: 86.8 Minuten
-  Cluster 2: 106.0 Minuten
+  Cluster 0: 128.9 Minuten
+  Cluster 1: 72.3 Minuten
+  Cluster 2: 74.1 Minuten
 
 Team UTA:
-  Cluster 0: 89.9 Minuten
-  Cluster 1: 108.4 Minuten
-  Cluster 2: 61.2 Minuten
+  Cluster 0: 72.6 Minuten
+  Cluster 1: 86.3 Minuten
+  Cluster 2: 67.0 Minuten
 
 Team WAS:
-  Cluster 0: 29.4 Minuten
-  Cluster 1: 139.4 Minuten
-  Cluster 2: 89.9 Minuten
+  Cluster 0: 26.6 Minuten
+  Cluster 1: 132.2 Minuten
+  Cluster 2: 101.0 Minuten
 
 
 === Regression: Siege ~ Cluster-Minuten ===
 Koeffizienten:
-2    0.265042
-0    0.264826
-1    0.222140
+2    0.092591
+0    0.004019
+1   -0.030563
 dtype: float64
-Intercept (Basis-Siege): -23.462
-R²: 0.0465
-Adjusted R²: -0.0635
-MAE: 10.7501
-MSE: 164.3782
-RMSE: 12.8210
+Intercept (Basis-Siege): 37.106
+R²: 0.0242
+Adjusted R²: -0.0884
+MAE: 10.0595
+MSE: 168.2258
+RMSE: 12.9702
 
 === Dataset Info ===
 Total players: 300
 Teams: 30
 Features for clustering: 11
 Median AGE: 26.0
-Median MIN_AVG: 26.157384421134424
-Median PTS_AVG: 10.834767866458007
-Median REB_AVG: 4.026943942133816
-Median AST_AVG: 2.2432234432234432
+Median MIN_AVG: 26.310376984126982
+Median PTS_AVG: 10.643483709273184
+Median REB_AVG: 4.057971014492754
+Median AST_AVG: 2.2713956894747858
 
 

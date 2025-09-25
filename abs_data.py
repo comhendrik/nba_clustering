@@ -13,7 +13,7 @@ import seaborn as sns
 # ==============================================
 # Einstellungen
 # ==============================================
-csv_file = "nba_player_stats_2024_25.csv"
+csv_file = "nba_player_stats_2022_23.csv"
 mode = "AVG"     # <--- z.B. PER_36, PER_40, per35
 cluster_size = 3
 output_dir = "cluster_outputs"

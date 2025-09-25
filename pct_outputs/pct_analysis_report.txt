@@ -1,11 +1,11 @@
 === NBA 2024-25 Advanced Percentages Cluster & Regression Analysis ===
 
 === Cluster-Summary (Medianwerte) ===
-         USG_PCT_Usage  PCT_FGM_Usage  PCT_FG3M_Usage  PCT_FTM_Usage  PCT_OREB_Usage  ...  PCT_TOV_Usage  PCT_STL_Usage  PCT_BLK_Usage  PCT_PF_Usage  PCT_PFD_Usage
-cluster                                                                               ...                                                                          
-0               0.1620          0.168           0.220         0.1220          0.1510  ...          0.140         0.1950         0.1290        0.1890          0.136
-1               0.1655          0.194           0.037         0.1775          0.4185  ...          0.182         0.1765         0.3755        0.2485          0.219
-2               0.2530          0.253           0.243         0.3090          0.1140  ...          0.265         0.2100         0.1270        0.1740          0.278
+         USG_PCT_Usage  PCT_FGM_Usage  PCT_FG3M_Usage  PCT_FTM_Usage  ...  PCT_STL_Usage  PCT_BLK_Usage  PCT_PF_Usage  PCT_PFD_Usage
+cluster                                                               ...                                                           
+0               0.1620          0.168           0.220         0.1220  ...         0.1950         0.1290        0.1890          0.136
+1               0.1655          0.194           0.037         0.1775  ...         0.1765         0.3755        0.2485          0.219
+2               0.2530          0.253           0.243         0.3090  ...         0.2100         0.1270        0.1740          0.278
 
 [3 rows x 12 columns]
 
