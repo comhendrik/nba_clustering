@@ -124,14 +124,14 @@ def create_df_ratings(season_type: str):
 #TODO get ratings for playoff stats, win counts or round, test both and compare both of them with each other
 
 # Load or create each DataFrame
-df_percentiles_offensive_rs = load_or_create_df("df_percentiles_offensive_rs", create_df_percentiles_offensive("Regular Season"))
-df_percentiles_defensive_rs = load_or_create_df("df_percentiles_defensive_rs", create_df_percentiles_defensive("Regular Season"))
-df_percentiles_offensive_defensive_rs = load_or_create_df("df_percentiles_offensive_defensive_rs", create_df_percentiles_offensive_defensive("Regular Season"))
-df_ratings_rs = load_or_create_df("df_ratings_rs", create_df_ratings("Regular Season"))
-df_percentiles_offensive_po = load_or_create_df("df_percentiles_offensive_po", create_df_percentiles_offensive("Playoffs"))
-df_percentiles_defensive_po = load_or_create_df("df_percentiles_defensive_po", create_df_percentiles_defensive("Playoffs"))
-df_percentiles_offensive_defensive_po = load_or_create_df("df_percentiles_offensive_defensive_po", create_df_percentiles_offensive_defensive("Playoffs"))
-df_ratings_po = load_or_create_df("df_ratings_po", create_df_ratings("Playoffs"))
+df_percentiles_offensive_rs = load_or_create_df("df_percentiles_offensive_rs", lambda: create_df_percentiles_offensive("Regular Season"))
+df_percentiles_defensive_rs = load_or_create_df("df_percentiles_defensive_rs", lambda: create_df_percentiles_defensive("Regular Season"))
+df_percentiles_offensive_defensive_rs = load_or_create_df("df_percentiles_offensive_defensive_rs", lambda: create_df_percentiles_offensive_defensive("Regular Season"))
+df_ratings_rs = load_or_create_df("df_ratings_rs", lambda: create_df_ratings("Regular Season"))
+df_percentiles_offensive_po = load_or_create_df("df_percentiles_offensive_po", lambda: create_df_percentiles_offensive("Playoffs"))
+df_percentiles_defensive_po = load_or_create_df("df_percentiles_defensive_po", lambda: create_df_percentiles_defensive("Playoffs"))
+df_percentiles_offensive_defensive_po = load_or_create_df("df_percentiles_offensive_defensive_po", lambda: create_df_percentiles_offensive_defensive("Playoffs"))
+df_ratings_po = load_or_create_df("df_ratings_po", lambda: create_df_ratings("Playoffs"))
 
 def running_regression(df_percentiles, df_rating, goal_rating, season_type):
     df = pd.merge(df_percentiles, df_rating, on=["TEAM_ID"], how="left")

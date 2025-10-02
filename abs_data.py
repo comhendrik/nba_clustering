@@ -13,7 +13,7 @@ import seaborn as sns
 # ==============================================
 # Einstellungen
 # ==============================================
-csv_file = "nba_player_stats_2022_23.csv"
+csv_file = "nba_player_stats_2024_25.csv"
 mode = "AVG"     # <--- z.B. PER_36, PER_40, per35
 cluster_size = 3
 output_dir = "cluster_outputs"
@@ -63,9 +63,41 @@ base_feature_weights = {
     "PF": 0.205090,
     "TOV": 0.680298
 }
+
+
 feature_weights = {f"{k}_{mode}": v for k, v in base_feature_weights.items()}
 weights_array = np.array([feature_weights[f] for f in features])
 X_weighted = X_scaled * weights_array
+
+# ==============================================
+# 3b. Boxplots vor/nach Skalierung
+# ==============================================
+X_df = pd.DataFrame(X, columns=features)
+X_scaled_df = pd.DataFrame(X_scaled, columns=features)
+
+plt.figure(figsize=(14, 6))
+sns.boxplot(data=X_df, orient="h")
+plt.title("Boxplots der Features vor Skalierung")
+plt.tight_layout()
+plt.savefig(os.path.join(output_dir, "boxplots_before_scaling.png"), dpi=300)
+plt.close()
+
+plt.figure(figsize=(14, 6))
+sns.boxplot(data=X_scaled_df, orient="h")
+plt.title("Boxplots der Features nach MinMax-Skalierung")
+plt.tight_layout()
+plt.savefig(os.path.join(output_dir, "boxplots_after_scaling.png"), dpi=300)
+plt.close()
+
+# Optional: auch für gewichtete Features
+X_weighted_df = pd.DataFrame(X_weighted, columns=features)
+plt.figure(figsize=(14, 6))
+sns.boxplot(data=X_weighted_df, orient="h")
+plt.title("Boxplots der Features nach Gewichtung")
+plt.tight_layout()
+plt.savefig(os.path.join(output_dir, "boxplots_after_weighting.png"), dpi=300)
+plt.close()
+
 
 # ==============================================
 # 4. KMeans Clustering

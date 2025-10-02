@@ -1,0 +1,16 @@
+MAE: 2.80
+R²: 0.68
+MSE: 13.82
+
+Koeffizienten (descending by value):
+cut_defensive: 3.3786
+offscreen_defensive: 2.9362
+prballhandler_defensive: 2.1510
+spotup_defensive: 1.5908
+isolation_defensive: 1.5082
+postup_defensive: 1.0086
+transition_defensive: 0.4523
+handoff_defensive: 0.2801
+prrollman_defensive: -0.0274
+misc_defensive: -2.9913
+Intercept: 0.0000
