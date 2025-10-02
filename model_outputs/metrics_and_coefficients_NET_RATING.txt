@@ -1,0 +1,26 @@
+MAE: 1.92
+R²: 0.84
+MSE: 5.63
+
+Koeffizienten (descending by value):
+misc_defensive: 4.2699
+postup_offensive: 3.6093
+offscreen_offensive: 2.9377
+cut_offensive: 2.6277
+transition_offensive: 1.7963
+isolation_offensive: 1.7555
+prballhandler_offensive: 1.3942
+isolation_defensive: 1.2804
+prrollman_offensive: 0.8785
+prrollman_defensive: 0.7465
+spotup_offensive: 0.6945
+handoff_defensive: 0.5875
+cut_defensive: 0.1482
+handoff_offensive: -0.2123
+transition_defensive: -1.3428
+postup_defensive: -1.6016
+spotup_defensive: -1.9381
+prballhandler_defensive: -2.4807
+offscreen_defensive: -3.1848
+misc_offensive: -8.1040
+Intercept: 0.0000
