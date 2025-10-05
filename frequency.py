@@ -110,7 +110,7 @@ def load_or_create_df(name, create_func):
 
 # Define functions to generate data
 def create_df_percentiles_offensive(season_type: str):
-    return get_team_playtype_percentiles(season, playtypes, ["Offensive", "Defensive"], season_type)
+    return get_team_playtype_percentiles(season, playtypes, ["Offensive"], season_type)
 
 def create_df_percentiles_defensive(season_type: str):
     return get_team_playtype_percentiles(season, playtypes, ["Defensive"], season_type)
