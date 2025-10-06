@@ -9,6 +9,147 @@ from nba_api.stats.endpoints import leaguestandings
 from nba_api.stats.static import teams
 from sklearn.linear_model import LinearRegression
 import seaborn as sns
+import statsmodels.api as sm
+
+def running_regression(df_to_merge, df_rating, goal_rating, season_type):
+    # Merge datasets
+    merged = df_to_merge.merge(df_rating, on="TEAM_ABBREVIATION", how="inner")
+    X_reg = merged.drop(columns=["WINS", "TEAM_ABBREVIATION"]).copy()
+    X_reg.columns = X_reg.columns.astype(str)
+    y_reg = merged["WINS"]
+
+    # ------------------------
+    # 1. Initial regression
+    # ------------------------
+    sm_model = sm.OLS(y_reg, X_reg).fit()
+    sm_y_pred = sm_model.predict(X_reg)
+
+    sm_mae = mean_absolute_error(y_reg, sm_y_pred)
+    sm_mse = mean_squared_error(y_reg, sm_y_pred)
+    sm_r2 = r2_score(y_reg, sm_y_pred)
+
+    output_folder = "absolute/regression_outputs"
+    os.makedirs(output_folder, exist_ok=True)
+
+    plt.figure(figsize=(8,6))
+    plt.scatter(y_reg, sm_y_pred, color='blue')
+    plt.plot([y_reg.min(), y_reg.max()], [y_reg.min(), y_reg.max()], 'r--', linewidth=2)
+    plt.xlabel("Actual Values")
+    plt.ylabel("Predicted Values")
+    plt.title(f"Predicted vs Actual {goal_rating} ({season_type})")
+    plt.tight_layout()
+    plot_file = os.path.join(output_folder, f"predicted_vs_actual_initial_{goal_rating}_{season_type}.png")
+    plt.savefig(plot_file)
+    plt.close()
+    print(f"Predicted vs actual plot saved to {plot_file}")
+
+    # ------------------------
+    # 2. Backward elimination (p > 0.05)
+    # ------------------------
+    X_be = X_reg.copy()
+    iteration = 1
+    while True:
+        model_be = sm.OLS(y_reg, X_be).fit()
+        pvals = model_be.pvalues.drop('const', errors='ignore')
+        if len(pvals) == 0 or (pvals <= 0.05).all():
+            break
+        # Remove variable with largest p-value
+        worst_var = pvals.idxmax()
+        X_be = X_be.drop(columns=[worst_var])
+        iteration += 1
+
+    sm_model_sig = sm.OLS(y_reg, X_be).fit()
+    sm_y_pred_sig = sm_model_sig.predict(X_be)
+
+    sm_mae_sig = mean_absolute_error(y_reg, sm_y_pred_sig)
+    sm_mse_sig = mean_squared_error(y_reg, sm_y_pred_sig)
+    sm_r2_sig = r2_score(y_reg, sm_y_pred_sig)
+
+    # ------------------------
+    # 3. Output folder & text file
+    # ------------------------
+    
+    txt_file = os.path.join(output_folder, f"metrics_and_coefficients_{goal_rating}_{season_type}.txt")
+
+    with open(txt_file, "w") as f:
+        # Initial regression
+        f.write("=== Initial Regression (all variables) ===\n")
+        f.write(f"MAE: {sm_mae:.2f}\nR²: {sm_r2:.2f}\nMSE: {sm_mse:.2f}\n")
+        f.write(f"F-Statistik: {sm_model.fvalue:.3f}, p-Wert: {sm_model.f_pvalue:.4f}\n\n")
+        f.write("Koeffizienten:\n")
+        for var, coef, pval, tval in zip(sm_model.params.index, sm_model.params.values,
+                                         sm_model.pvalues.values, sm_model.tvalues.values):
+            f.write(f"{var}: {coef:.4f}, p={pval:.4f}, t={tval:.2f}\n")
+
+        # Regression after backward elimination
+        f.write("\n=== Regression after Backward Elimination (p <= 0.05) ===\n")
+        f.write(f"MAE: {sm_mae_sig:.2f}\nR²: {sm_r2_sig:.2f}\nMSE: {sm_mse_sig:.2f}\n")
+        f.write(f"F-Statistik: {sm_model_sig.fvalue:.3f}, p-Wert: {sm_model_sig.f_pvalue:.4f}\n\n")
+        f.write("Koeffizienten:\n")
+        for var, coef, pval, tval in zip(sm_model_sig.params.index, sm_model_sig.params.values,
+                                         sm_model_sig.pvalues.values, sm_model_sig.tvalues.values):
+            f.write(f"{var}: {coef:.4f}, p={pval:.4f}, t={tval:.2f}\n")
+
+    print(f"Metrics and coefficients saved to {txt_file}")
+
+    # ------------------------
+    # 4. Plot predicted vs actual for final model
+    # ------------------------
+    plt.figure(figsize=(8,6))
+    plt.scatter(y_reg, sm_y_pred_sig, color='blue')
+    plt.plot([y_reg.min(), y_reg.max()], [y_reg.min(), y_reg.max()], 'r--', linewidth=2)
+    plt.xlabel("Actual Values")
+    plt.ylabel("Predicted Values")
+    plt.title(f"Predicted vs Actual {goal_rating} ({season_type})")
+    plt.tight_layout()
+    plot_file = os.path.join(output_folder, f"predicted_vs_actual_{goal_rating}_{season_type}.png")
+    plt.savefig(plot_file)
+    plt.close()
+    print(f"Predicted vs actual plot saved to {plot_file}")
+
+    # ------------------------
+    # 5. Residual plot
+    # ------------------------
+    residuals = y_reg - sm_y_pred_sig
+    plt.figure(figsize=(8, 6))
+    sns.histplot(residuals, kde=True, bins=15)
+    plt.xlabel("Residual (Actual – Predicted)")
+    plt.title("Distribution of Residuals")
+    plt.grid(True)
+    residual_file = os.path.join(output_folder, f"residuals_distribution_{goal_rating}_{season_type}.png")
+    plt.savefig(residual_file)
+    plt.close()
+    print(f"Residual plot saved to {residual_file}")
+
+
+def running_correlation(df, season_type):
+    ## correlation
+
+    output_folder = "absolute/correlation_outputs"
+    os.makedirs(output_folder, exist_ok=True)
+    
+
+    exclude_cols = ["TEAM_ID", "TEAM_ABBREVIATION", "TEAM_NAME"]  # example columns
+
+    # Select only numeric columns
+    numeric_df = df.select_dtypes(include=["number"])
+
+    # Remove specific columns
+    numeric_df = numeric_df.drop(columns=[col for col in exclude_cols if col in numeric_df.columns])
+
+    # Compute correlation matrix
+    corr_matrix = numeric_df.corr()
+
+    # ------------------------
+    # 4. Save correlation heatmap as PNG
+    # ------------------------
+    plt.figure(figsize=(6, 5))
+    sns.heatmap(corr_matrix, annot=True, cmap='coolwarm', fmt=".2f")
+    plt.title("Correlation Matrix")
+    corr_png_file = os.path.join(output_folder, f"correlation_matrix_{season_type}.png")
+    plt.savefig(corr_png_file)
+    plt.close()
+    print(f"Correlation heatmap saved to {corr_png_file}")
 
 # ==============================================
 # Einstellungen
@@ -16,7 +157,7 @@ import seaborn as sns
 csv_file = "nba_player_stats_2024_25.csv"
 mode = "AVG"     # <--- z.B. PER_36, PER_40, per35
 cluster_size = 3
-output_dir = "cluster_outputs"
+output_dir = "absolute/extended"
 os.makedirs(output_dir, exist_ok=True)
 
 report_path = os.path.join(output_dir, "analysis_report.txt")
@@ -43,6 +184,8 @@ if missing:
     raise ValueError(f"Fehlende Spalten im DataFrame: {missing}")
 
 X = filtered_players[features].fillna(0)
+
+
 
 # ==============================================
 # 3. Skalierung & Gewichtung
@@ -169,53 +312,9 @@ team_map = {t["id"]: t["abbreviation"] for t in nba_teams}
 standings["TEAM_ABBREVIATION"] = standings["TeamID"].map(team_map)
 team_wins = standings[["TEAM_ABBREVIATION", "WINS"]]
 
-merged = team_cluster_minutes.merge(team_wins, on="TEAM_ABBREVIATION", how="inner")
-X_reg = merged.drop(columns=["WINS", "TEAM_ABBREVIATION"]).copy()
-X_reg.columns = X_reg.columns.astype(str)
-y_reg = merged["WINS"]
+running_regression(team_cluster_minutes, team_wins, "WINS", "Regular Season")
 
-reg = LinearRegression()
-reg.fit(X_reg, y_reg)
-y_pred = reg.predict(X_reg)
-
-# Regression metrics
-r2 = r2_score(y_reg, y_pred)
-n, p = X_reg.shape
-adj_r2 = 1 - (1 - r2) * (n - 1) / (n - p - 1)
-mae = mean_absolute_error(y_reg, y_pred)
-mse = mean_squared_error(y_reg, y_pred)
-rmse = np.sqrt(mse)
-
-coefficients = pd.Series(reg.coef_, index=X_reg.columns).sort_values(ascending=False)
-
-with open(report_path, "a") as report:
-    report.write("=== Regression: Siege ~ Cluster-Minuten ===\n")
-    report.write("Koeffizienten:\n")
-    report.write(str(coefficients))
-    report.write(f"\nIntercept (Basis-Siege): {reg.intercept_:.3f}\n")
-    report.write(f"R²: {r2:.4f}\n")
-    report.write(f"Adjusted R²: {adj_r2:.4f}\n")
-    report.write(f"MAE: {mae:.4f}\n")
-    report.write(f"MSE: {mse:.4f}\n")
-    report.write(f"RMSE: {rmse:.4f}\n\n")
-
-# Regression plot
-plt.figure(figsize=(7, 5))
-sns.regplot(x=y_reg, y=y_pred, ci=None, line_kws={"color": "red", "lw": 2})
-plt.xlabel("Tatsächliche Siege")
-plt.ylabel("Vorhergesagte Siege")
-plt.title("Regression: Tatsächliche vs. Vorhergesagte Siege")
-plt.annotate(
-    f"R² = {r2:.3f}\nAdj. R² = {adj_r2:.3f}\nRMSE = {rmse:.2f}",
-    xy=(0.05, 0.85),
-    xycoords="axes fraction",
-    fontsize=10,
-    bbox=dict(boxstyle="round,pad=0.3", edgecolor="black", facecolor="white")
-)
-plt.tight_layout()
-plt.savefig(os.path.join(output_dir, "regression_fit.png"), dpi=300)
-plt.close()
-
+running_correlation(team_cluster_minutes, "Cluster")
 # ==============================================
 # 10. Dataset-Info
 # ==============================================

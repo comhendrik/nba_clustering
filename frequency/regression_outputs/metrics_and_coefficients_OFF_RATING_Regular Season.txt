@@ -1,0 +1,33 @@
+=== Initial Regression (all variables) ===
+MAE: 1.86
+R²: 0.63
+MSE: 5.16
+F-Statistik: 3.205, p-Wert: 0.0140
+
+Koeffizienten:
+const: 15.7283, p=0.8271, t=0.22
+isolation_offensive: 1.1768, p=0.1410, t=1.54
+cut_offensive: 2.0582, p=0.0244, t=2.45
+spotup_offensive: 1.0509, p=0.1617, t=1.46
+postup_offensive: 2.3002, p=0.0164, t=2.63
+handoff_offensive: 0.5351, p=0.5740, t=0.57
+transition_offensive: 1.2817, p=0.1438, t=1.52
+prballhandler_offensive: 1.4635, p=0.0990, t=1.73
+prrollman_offensive: -0.1000, p=0.9073, t=-0.12
+offscreen_offensive: 1.3463, p=0.1879, t=1.37
+misc_offensive: -2.1045, p=0.2152, t=-1.28
+
+=== Regression after Backward Elimination (p <= 0.05) ===
+MAE: 1.99
+R²: 0.53
+MSE: 6.50
+F-Statistik: 4.348, p-Wert: 0.0045
+
+Koeffizienten:
+const: 36.5508, p=0.0722, t=1.88
+isolation_offensive: 0.9094, p=0.0156, t=2.61
+cut_offensive: 2.1815, p=0.0012, t=3.70
+spotup_offensive: 0.8938, p=0.0047, t=3.13
+postup_offensive: 1.7042, p=0.0010, t=3.77
+transition_offensive: 0.6988, p=0.0326, t=2.27
+prballhandler_offensive: 1.0053, p=0.0123, t=2.72

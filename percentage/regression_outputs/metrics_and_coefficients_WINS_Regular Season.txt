@@ -1,0 +1,19 @@
+=== Initial Regression (all variables) ===
+MAE: 10.60
+R²: 0.05
+MSE: 163.00
+F-Statistik: 93.332, p-Wert: 0.0000
+
+Koeffizienten:
+0: 0.2047, p=0.0040, t=3.15
+1: 0.1418, p=0.2374, t=1.21
+2: 0.1044, p=0.1644, t=1.43
+
+=== Regression after Backward Elimination (p <= 0.05) ===
+MAE: 11.20
+R²: -0.08
+MSE: 186.98
+F-Statistik: 258.453, p-Wert: 0.0000
+
+Koeffizienten:
+0: 0.3281, p=0.0000, t=16.08

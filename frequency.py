@@ -5,7 +5,7 @@ from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 import seaborn as sns
 import matplotlib.pyplot as plt
-from scipy.optimize import minimize
+import statsmodels.api as sm
 
 # ------------------------
 # 1. Collect team playtype percentiles
@@ -133,72 +133,127 @@ df_percentiles_defensive_po = load_or_create_df("df_percentiles_defensive_po", l
 df_percentiles_offensive_defensive_po = load_or_create_df("df_percentiles_offensive_defensive_po", lambda: create_df_percentiles_offensive_defensive("Playoffs"))
 df_ratings_po = load_or_create_df("df_ratings_po", lambda: create_df_ratings("Playoffs"))
 
+import os
+import pandas as pd
+import statsmodels.api as sm
+import matplotlib.pyplot as plt
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+
+import os
+import pandas as pd
+import statsmodels.api as sm
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+
 def running_regression(df_percentiles, df_rating, goal_rating, season_type):
+    # Merge datasets
     df = pd.merge(df_percentiles, df_rating, on=["TEAM_ID"], how="left")
 
-    # Sum of all playtype columns
-
-
-    # ------------------------
-    # 4. Linear regression using scikit-learn
-    # ------------------------
-    feature_cols = [col for col in df.columns if col not in ["TEAM_ABBREVIATION","TEAM_ID", "TEAM_NAME", "OFF_RATING", "DEF_RATING", "NET_RATING", "OffensiveRank", "DefensiveRank", "NetRank", "W"]]
+    # Select features
+    exclude_cols = ["TEAM_ABBREVIATION","TEAM_ID", "TEAM_NAME", "OFF_RATING", "DEF_RATING",
+                    "NET_RATING", "OffensiveRank", "DefensiveRank", "NetRank", "W"]
+    feature_cols = [col for col in df.columns if col not in exclude_cols]
 
     X = df[feature_cols]
     y = df[goal_rating]
 
-    model = LinearRegression(fit_intercept=False)
-    model.fit(X, y)
-    y_pred = model.predict(X)
+    # Add constant for intercept
+    X_sm = sm.add_constant(X)
 
     # ------------------------
-    # 5. Evaluate model
+    # 1. Initial regression
     # ------------------------
-    mae = mean_absolute_error(y, y_pred)
-    r2 = r2_score(y, y_pred)
-    mse = mean_squared_error(y, y_pred)
+    sm_model = sm.OLS(y, X_sm).fit()
+    sm_y_pred = sm_model.predict(X_sm)
 
-    # ------------------------
-    # 2. Output folder
-    # ------------------------
-    output_folder = "model_outputs"
+    sm_mae = mean_absolute_error(y, sm_y_pred)
+    sm_mse = mean_squared_error(y, sm_y_pred)
+    sm_r2 = r2_score(y, sm_y_pred)
+
+    output_folder = "frequency/regression_outputs"
     os.makedirs(output_folder, exist_ok=True)
 
+    plt.figure(figsize=(8,6))
+    plt.scatter(y, sm_y_pred, color='blue')
+    plt.plot([y.min(), y.max()], [y.min(), y.max()], 'r--', linewidth=2)
+    plt.xlabel("Actual Values")
+    plt.ylabel("Predicted Values")
+    plt.title(f"Predicted vs Actual {goal_rating} ({season_type})")
+    plt.tight_layout()
+    plot_file = os.path.join(output_folder, f"predicted_vs_actual_initial_{goal_rating}_{season_type}.png")
+    plt.savefig(plot_file)
+    plt.close()
+    print(f"Predicted vs actual plot saved to {plot_file}")
+
     # ------------------------
-    # 3. Save metrics & coefficients to a text file
+    # 2. Backward elimination (p > 0.05)
     # ------------------------
+    X_be = X_sm.copy()
+    iteration = 1
+    while True:
+        model_be = sm.OLS(y, X_be).fit()
+        pvals = model_be.pvalues.drop('const', errors='ignore')
+        if len(pvals) == 0 or (pvals <= 0.05).all():
+            break
+        # Remove variable with largest p-value
+        worst_var = pvals.idxmax()
+        X_be = X_be.drop(columns=[worst_var])
+        iteration += 1
+
+    sm_model_sig = sm.OLS(y, X_be).fit()
+    sm_y_pred_sig = sm_model_sig.predict(X_be)
+
+    sm_mae_sig = mean_absolute_error(y, sm_y_pred_sig)
+    sm_mse_sig = mean_squared_error(y, sm_y_pred_sig)
+    sm_r2_sig = r2_score(y, sm_y_pred_sig)
+
+    # ------------------------
+    # 3. Output folder & text file
+    # ------------------------
+    
     txt_file = os.path.join(output_folder, f"metrics_and_coefficients_{goal_rating}_{season_type}.txt")
+
     with open(txt_file, "w") as f:
-        f.write(f"MAE: {mae:.2f}\n")
-        f.write(f"R²: {r2:.2f}\n")
-        f.write(f"MSE: {mse:.2f}\n\n")
-        
-        f.write("Koeffizienten (descending by value):\n")
-        for feature, coef in sorted(zip(feature_cols, model.coef_), key=lambda x: x[1], reverse=True):
-            f.write(f"{feature}: {coef:.4f}\n")
-        f.write(f"Intercept: {model.intercept_:.4f}\n")
+        # Initial regression
+        f.write("=== Initial Regression (all variables) ===\n")
+        f.write(f"MAE: {sm_mae:.2f}\nR²: {sm_r2:.2f}\nMSE: {sm_mse:.2f}\n")
+        f.write(f"F-Statistik: {sm_model.fvalue:.3f}, p-Wert: {sm_model.f_pvalue:.4f}\n\n")
+        f.write("Koeffizienten:\n")
+        for var, coef, pval, tval in zip(sm_model.params.index, sm_model.params.values,
+                                         sm_model.pvalues.values, sm_model.tvalues.values):
+            f.write(f"{var}: {coef:.4f}, p={pval:.4f}, t={tval:.2f}\n")
+
+        # Regression after backward elimination
+        f.write("\n=== Regression after Backward Elimination (p <= 0.05) ===\n")
+        f.write(f"MAE: {sm_mae_sig:.2f}\nR²: {sm_r2_sig:.2f}\nMSE: {sm_mse_sig:.2f}\n")
+        f.write(f"F-Statistik: {sm_model_sig.fvalue:.3f}, p-Wert: {sm_model_sig.f_pvalue:.4f}\n\n")
+        f.write("Koeffizienten:\n")
+        for var, coef, pval, tval in zip(sm_model_sig.params.index, sm_model_sig.params.values,
+                                         sm_model_sig.pvalues.values, sm_model_sig.tvalues.values):
+            f.write(f"{var}: {coef:.4f}, p={pval:.4f}, t={tval:.2f}\n")
 
     print(f"Metrics and coefficients saved to {txt_file}")
 
     # ------------------------
-    # 4. Scatterplot: Actual vs Predicted
+    # 4. Plot predicted vs actual for final model
     # ------------------------
-    plt.figure(figsize=(8, 6))
-    sns.scatterplot(x=y, y=y_pred)
-    plt.plot([y.min(), y.max()], [y.min(), y.max()], "r--", lw=2)
-    plt.xlabel("Actual Wins")
-    plt.ylabel("Predicted Wins")
-    plt.title("Actual vs Predicted Wins (Team-level)")
-    plt.grid(True)
-    scatter_file = os.path.join(output_folder, f"actual_vs_predicted_{goal_rating}_{season_type}.png")
-    plt.savefig(scatter_file)
+    plt.figure(figsize=(8,6))
+    plt.scatter(y, sm_y_pred_sig, color='blue')
+    plt.plot([y.min(), y.max()], [y.min(), y.max()], 'r--', linewidth=2)
+    plt.xlabel("Actual Values")
+    plt.ylabel("Predicted Values")
+    plt.title(f"Predicted vs Actual {goal_rating} ({season_type})")
+    plt.tight_layout()
+    plot_file = os.path.join(output_folder, f"predicted_vs_actual_{goal_rating}_{season_type}.png")
+    plt.savefig(plot_file)
     plt.close()
-    print(f"Scatterplot saved to {scatter_file}")
+    print(f"Predicted vs actual plot saved to {plot_file}")
 
     # ------------------------
     # 5. Residual plot
     # ------------------------
-    residuals = y - y_pred
+    residuals = y - sm_y_pred_sig
     plt.figure(figsize=(8, 6))
     sns.histplot(residuals, kde=True, bins=15)
     plt.xlabel("Residual (Actual – Predicted)")
@@ -209,15 +264,24 @@ def running_regression(df_percentiles, df_rating, goal_rating, season_type):
     plt.close()
     print(f"Residual plot saved to {residual_file}")
 
+
 def running_correlation(df, season_type):
     ## correlation
 
-    output_folder = "model_outputs"
+    output_folder = "frequency/correlation_outputs"
     os.makedirs(output_folder, exist_ok=True)
-    cols = ["OFF_RATING", "DEF_RATING", "NET_RATING","W"]
+    
+
+    exclude_cols = ["TEAM_ID", "TEAM_ABBREVIATION", "TEAM_NAME"]  # example columns
+
+    # Select only numeric columns
+    numeric_df = df.select_dtypes(include=["number"])
+
+    # Remove specific columns
+    numeric_df = numeric_df.drop(columns=[col for col in exclude_cols if col in numeric_df.columns])
 
     # Compute correlation matrix
-    corr_matrix = df[cols].corr()
+    corr_matrix = numeric_df.corr()
 
     # ------------------------
     # 3. Save correlation matrix as CSV
@@ -243,10 +307,15 @@ running_regression(df_percentiles_offensive_defensive_rs, df_ratings_rs, "NET_RA
 running_correlation(df_ratings_rs, "Regular Season")
 
 
-running_regression(df_percentiles_offensive_po, df_ratings_po, "OFF_RATING", "Playoffs")
-running_regression(df_percentiles_defensive_po, df_ratings_po, "DEF_RATING", "Playoffs")
-running_regression(df_percentiles_offensive_defensive_po, df_ratings_po, "NET_RATING", "Playoffs")
-running_correlation(df_ratings_po, "Playoffs")
+#running_regression(df_percentiles_offensive_po, df_ratings_po, "OFF_RATING", "Playoffs")
+#running_regression(df_percentiles_defensive_po, df_ratings_po, "DEF_RATING", "Playoffs")
+#running_regression(df_percentiles_offensive_defensive_po, df_ratings_po, "NET_RATING", "Playoffs")
+#running_correlation(df_ratings_po, "Playoffs")
+
+
+running_correlation(df_percentiles_defensive_rs, "Defensive Regular Season")
+running_correlation(df_percentiles_offensive_rs, "Offensive Regular Season")
+running_correlation(df_percentiles_offensive_defensive_rs, "Offensive and Defensive Regular Season")
 
 
 

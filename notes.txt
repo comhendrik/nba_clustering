@@ -1,6 +1,0 @@
-Shooter -> a lot of three pointers
-Slasher -> a lot of two pointers
-Rebounder -> a lot of rebounds
-Defensive -> a lot of steals and blocks
-Playmaker -> a lot of assits
-Average -> overall average player

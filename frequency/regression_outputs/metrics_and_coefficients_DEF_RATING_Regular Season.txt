@@ -1,0 +1,30 @@
+=== Initial Regression (all variables) ===
+MAE: 1.14
+R²: 0.74
+MSE: 2.40
+F-Statistik: 5.286, p-Wert: 0.0009
+
+Koeffizienten:
+const: 103.7705, p=0.3477, t=0.96
+isolation_defensive: -1.7383, p=0.1480, t=-1.51
+cut_defensive: 1.1194, p=0.4140, t=0.84
+spotup_defensive: -0.0573, p=0.9638, t=-0.05
+postup_defensive: 0.9683, p=0.5378, t=0.63
+handoff_defensive: 1.3089, p=0.4351, t=0.80
+transition_defensive: 1.0411, p=0.4029, t=0.86
+prballhandler_defensive: -0.4810, p=0.7165, t=-0.37
+prrollman_defensive: 0.2264, p=0.8541, t=0.19
+offscreen_defensive: -0.0680, p=0.9673, t=-0.04
+misc_defensive: -1.3175, p=0.1931, t=-1.35
+
+=== Regression after Backward Elimination (p <= 0.05) ===
+MAE: 1.65
+R²: 0.60
+MSE: 3.62
+F-Statistik: 13.033, p-Wert: 0.0000
+
+Koeffizienten:
+const: 110.1434, p=0.0000, t=15.69
+isolation_defensive: -1.7067, p=0.0013, t=-3.59
+transition_defensive: 1.3154, p=0.0001, t=4.45
+misc_defensive: -1.7138, p=0.0051, t=-3.06
